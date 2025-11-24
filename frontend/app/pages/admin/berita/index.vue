@@ -33,21 +33,28 @@
       </thead>
 
       <tbody>
-        <tr v-for="item in beritaList" :key="item.id" class="hover:bg-gray-50">
+        <tr
+          v-for="item in beritaList"
+          :key="item.id"
+          class="hover:bg-gray-50"
+        >
           <td class="border p-2">{{ item.id }}</td>
           <td class="border p-2">{{ item.title }}</td>
           <td class="border p-2">{{ item.category }}</td>
 
+          <!-- Cover -->
           <td class="border p-2">
             <img
               v-if="item.cover"
               :src="coverUrl(item.cover)"
               class="h-20 w-20 object-cover border rounded"
               alt="Cover Berita"
+              @error="hideBrokenImage"
             />
             <span v-else class="text-gray-400">Tidak ada</span>
           </td>
 
+          <!-- Aksi -->
           <td class="border p-2 flex gap-2">
             <NuxtLink
               :to="`/admin/berita/edit/${item.id}`"
@@ -55,6 +62,7 @@
             >
               Edit
             </NuxtLink>
+
             <button
               class="px-3 py-1 bg-red-600 text-white rounded hover:bg-red-700"
               @click="hapus(item.id)"
@@ -71,14 +79,24 @@
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
 
+definePageMeta({ layout: 'admin' })
+
 const beritaList = ref<any[]>([])
 const loading = ref(true)
 
-// 🔥 FIX: Fungsi untuk generate URL gambar dengan /berita/
-const coverUrl = (cover: string) => {
-  if (!cover) return '/default-cover.jpg' // Fallback lokal (pastikan ada di frontend/public/)
-  // Asumsi cover adalah nama file saja; jika path lengkap, sesuaikan
+/*  
+  FIX: Menghapus /default-cover.jpg untuk menghindari warning router.
+  Jika cover tidak ada → tampilkan "Tidak ada" saja.
+*/
+const coverUrl = (cover: string | null) => {
+  if (!cover) return undefined
   return `http://localhost:8080/uploads/berita/${cover}`
+}
+
+// Hides broken image without using default-cover.jpg
+const hideBrokenImage = (e: Event) => {
+  const target = e.target as HTMLImageElement
+  target.style.display = 'none'
 }
 
 async function loadBerita() {

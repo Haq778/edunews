@@ -1,20 +1,30 @@
-// https://nuxt.com/docs/api/configuration/nuxt-config
-// import { defineNuxtConfig } from 'nuxt/config'
+export default defineNuxtConfig({
+  compatibilityDate: '2025-11-21',
 
-export default {
-  compatibilityDate: '2025-11-11',
-  modules: ['@nuxtjs/tailwindcss'],
+  modules: [
+    '@nuxtjs/tailwindcss',
+    '@nuxtjs/color-mode'
+  ],
+
   tailwindcss: {
     viewer: true
   },
-  // Tambahan konfigurasi baru
+
+  colorMode: {
+    classSuffix: '', // penting agar class = "dark"
+    preference: 'system', 
+    fallback: 'light'
+  },
+
   css: ['~/assets/css/tailwind.css'],
+
   postcss: {
     plugins: {
       tailwindcss: {},
       autoprefixer: {},
     },
   },
+
   app: {
     head: {
       title: 'EduNews - Platform Berita Pendidikan',
@@ -27,5 +37,7 @@ export default {
         { rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }
       ]
     }
-  }
-}
+  },
+
+  vite: { css: { preprocessorOptions: { } } }
+})

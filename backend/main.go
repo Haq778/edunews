@@ -30,7 +30,7 @@ func main() {
 	dbUser := mustEnv("DB_USER", "postgres")
 	dbPass := mustEnv("DB_PASS", "12345")
 
-	// DSN for PostgreSQL
+	// DSN PostgreSQL
 	dsn := fmt.Sprintf(
 		"host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
 		dbHost, dbPort, dbUser, dbPass, dbName,
@@ -39,8 +39,8 @@ func main() {
 	// Connect to DB
 	database.Connect(dsn)
 
-	// Auto migrate models
-	if err := database.DB.AutoMigrate(&models.Berita{}, &models.User{}); err != nil {
+	// Auto migrate
+	if err := database.DB.AutoMigrate(&models.Berita{}, &models.User{}, &models.Category{}); err != nil {
 		log.Fatalf("AutoMigrate failed: %v", err)
 	}
 
@@ -48,11 +48,16 @@ func main() {
 	r := gin.Default()
 	r.Use(cors.Default())
 
-	// Serve static uploads folder (Solusi A)
-	// Bisa diakses via browser:
-	// http://localhost:8080/uploads/berita/filename.jpg
+	// Serve uploads
 	r.Static("/uploads", "./public/uploads")
 
+	// Pastikan folder uploads/berita ada
+	uploadDir := "./public/uploads/berita"
+	if err := os.MkdirAll(uploadDir, os.ModePerm); err != nil {
+		log.Fatalf("Gagal membuat folder upload: %v", err)
+	}
+
+	// API group
 	api := r.Group("/api")
 	{
 		// Berita CRUD
@@ -62,15 +67,18 @@ func main() {
 		api.PUT("/berita/:id", handlers.UpdateBerita)
 		api.DELETE("/berita/:id", handlers.DeleteBerita)
 
-		// User register + login
+		// Category CRUD
+		api.GET("/categories", handlers.GetCategories)
+		api.POST("/categories", handlers.CreateCategory)
+		api.PUT("/categories/:id", handlers.UpdateCategory)
+		api.DELETE("/categories/:id", handlers.DeleteCategory)
+
+		// Users read-only
+		api.GET("/users", handlers.GetUsers)
+
+		// Auth
 		api.POST("/register", handlers.Register)
 		api.POST("/login", handlers.Login)
-	}
-
-	// Pastikan folder uploads/berita ada
-	uploadDir := "./uploads/berita"
-	if err := os.MkdirAll(uploadDir, os.ModePerm); err != nil {
-		log.Fatalf("Gagal membuat folder upload: %v", err)
 	}
 
 	// Run server

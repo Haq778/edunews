@@ -22,14 +22,23 @@ import { useRouter } from '#imports'
 
 definePageMeta({ layout: 'admin' })
 
-const articles = ref<any[]>([])
+interface BeritaItem {
+  id: number
+  title: string
+  slug: string
+  category: string
+  cover?: string
+  created_at?: string
+}
+
+const articles = ref<BeritaItem[]>([])
 const loading = ref(true)
 const router = useRouter()
 
 async function fetchAll() {
   loading.value = true
   try {
-    const res = await $fetch('/api/berita')
+    const res = await $fetch<BeritaItem[]>('/api/berita')
     articles.value = res || []
   } catch (e) {
     console.error(e)

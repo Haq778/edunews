@@ -1,11 +1,11 @@
 <template>
-  <div class="min-h-screen bg-gray-50 dark:bg-gray-900 transition-colors duration-300">
-    <main>
+  <div :class="colorMode.value" class="min-h-screen transition-colors duration-300">
+    <main class="bg-gray-50 dark:bg-gray-900 min-h-screen">
       <slot />
     </main>
   </div>
 </template>
 
 <script setup>
-// Layout default dengan navbar dan background
+const colorMode = useColorMode()
 </script>

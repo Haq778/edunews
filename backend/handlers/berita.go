@@ -11,7 +11,6 @@ import (
 	"edunews-backend/models"
 
 	"github.com/gin-gonic/gin"
-	"golang.org/x/crypto/bcrypt"
 )
 
 // GET /api/berita
@@ -145,62 +144,4 @@ func DeleteBerita(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "Berita dihapus"})
-}
-
-// POST /api/register
-func Register(c *gin.Context) {
-	var payload struct {
-		Email    string `json:"email"`
-		Password string `json:"password"`
-		Name     string `json:"name"`
-	}
-	if err := c.ShouldBindJSON(&payload); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	hash, _ := bcrypt.GenerateFromPassword([]byte(payload.Password), bcrypt.DefaultCost)
-	user := models.User{
-		Email:    payload.Email,
-		Password: string(hash),
-		Name:     payload.Name,
-		Role:     "admin",
-	}
-
-	if err := database.DB.Create(&user).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal membuat user"})
-		return
-	}
-
-	c.JSON(http.StatusOK, gin.H{"message": "User berhasil dibuat"})
-}
-
-// POST /api/login
-func Login(c *gin.Context) {
-	var payload struct {
-		Email    string `json:"email"`
-		Password string `json:"password"`
-	}
-	if err := c.ShouldBindJSON(&payload); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
-		return
-	}
-
-	var user models.User
-	if err := database.DB.Where("email = ?", payload.Email).First(&user).Error; err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Email atau password salah"})
-		return
-	}
-
-	if err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(payload.Password)); err != nil {
-		c.JSON(http.StatusUnauthorized, gin.H{"error": "Email atau password salah"})
-		return
-	}
-
-	c.JSON(http.StatusOK, gin.H{
-		"id":    user.ID,
-		"email": user.Email,
-		"name":  user.Name,
-		"role":  user.Role,
-	})
 }

@@ -1,31 +1,85 @@
-<!-- app/pages/login.vue -->
 <template>
-  <div class="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
-    <div class="max-w-md mx-auto px-4 sm:px-6 lg:px-8">
-      <div class="text-center mb-12">
-        <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">
-          Masuk ke EduNews
-        </h1>
-        <p class="text-xl text-gray-600 dark:text-gray-400">
-          Akses konten eksklusif dan simpan artikel favorit
-        </p>
-      </div>
-      
-      <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8">
-        <div class="text-center py-12">
-          <svg class="w-24 h-24 text-gray-300 dark:text-gray-600 mx-auto mb-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/>
-          </svg>
-          <h3 class="text-2xl font-semibold text-gray-600 dark:text-gray-400 mb-3">Fitur Login Segera Hadir</h3>
-          <p class="text-gray-500 dark:text-gray-500 mb-6">Sistem autentikasi sedang dalam pengembangan</p>
-          <NuxtLink 
-            to="/"
-            class="bg-gradient-to-r from-blue-500 to-purple-600 text-white px-8 py-3 rounded-xl font-semibold hover:shadow-lg transform hover:scale-105 transition duration-300 inline-block"
-          >
-            Kembali ke Beranda
-          </NuxtLink>
+  <div class="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-900">
+    <div class="w-full max-w-md p-8 bg-white dark:bg-gray-800 rounded-2xl shadow-lg">
+      <h2 class="text-2xl font-bold mb-6 text-gray-800 dark:text-white text-center">Login</h2>
+
+      <form @submit.prevent="handleLogin" class="space-y-4">
+        <div>
+          <label class="block mb-2 text-gray-700 dark:text-gray-300">Email</label>
+          <input v-model="email" type="email" required
+            class="w-full p-3 rounded-xl border border-gray-200 dark:border-gray-600 
+                   bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none 
+                   focus:ring-2 focus:ring-blue-500"/>
         </div>
-      </div>
+
+        <div>
+          <label class="block mb-2 text-gray-700 dark:text-gray-300">Password</label>
+          <input v-model="password" type="password" required
+            class="w-full p-3 rounded-xl border border-gray-200 dark:border-gray-600 
+                   bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none 
+                   focus:ring-2 focus:ring-blue-500"/>
+        </div>
+
+        <button type="submit" 
+                class="w-full py-3 bg-blue-600 text-white rounded-xl hover:bg-blue-500 transition font-semibold">
+          Login
+        </button>
+      </form>
+
+      <p class="mt-4 text-gray-600 dark:text-gray-300 text-center">
+        Belum punya akun? 
+        <NuxtLink to="/register" class="text-blue-600 dark:text-blue-400 font-semibold hover:underline">Daftar</NuxtLink>
+      </p>
     </div>
   </div>
 </template>
+
+<script setup lang="ts">
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+import type { User } from '~/composables/useAuth'
+import { useAuth } from '~/composables/useAuth'
+
+const email = ref('')
+const password = ref('')
+const router = useRouter()
+const auth = useAuth()
+
+async function handleLogin() {
+  try {
+    const res = await fetch('http://localhost:8080/api/login', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ email: email.value, password: password.value })
+    })
+
+    if (!res.ok) throw new Error(`Login gagal (HTTP ${res.status})`)
+
+    const data = await res.json()
+    if (!data.token || !data.user) throw new Error('Login gagal: user atau token tidak valid')
+
+    // simpan di state reactive (tanpa localStorage)
+    auth.login(data.token, data.user as User)
+
+    // redirect berdasarkan role
+    // simpan di state reactive (tanpa localStorage)
+    // tunggu jika auth.login mengembalikan Promise
+    const loginResult: void | Promise<void> = auth.login(data.token, data.user as User)
+    if (typeof loginResult === "object" && typeof (loginResult as Promise<void>)?.then === "function") await loginResult
+
+    // debug: pastikan role sesuai
+    // (hapus atau ubah jadi logger yang sesuai di production)
+    // eslint-disable-next-line no-console
+    console.log('logged user role:', data.user?.role)
+
+    // redirect berdasarkan role
+    if (data.user?.role === 'admin') {
+      await router.push('/admin/berita')
+    } else {
+      await router.push('/')
+    }
+    } catch (err: any) {
+    alert(err?.message || 'Login gagal')
+    }
+}
+</script>
