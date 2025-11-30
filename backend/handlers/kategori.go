@@ -3,7 +3,6 @@ package handlers
 import (
 	"net/http"
 	"strings"
-	"time"
 
 	"edunews-backend/database"
 	"edunews-backend/models"
@@ -21,16 +20,19 @@ func GetCategories(c *gin.Context) {
 	c.JSON(http.StatusOK, categories)
 }
 
-// POST /categories
 func CreateCategory(c *gin.Context) {
-	var category models.Category
-	if err := c.ShouldBindJSON(&category); err != nil {
+	var body struct {
+		Name string `json:"name"`
+	}
+
+	if err := c.ShouldBindJSON(&body); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	category.Slug = strings.ToLower(strings.ReplaceAll(category.Name, " ", "-"))
-	category.CreatedAt = time.Now()
+	category := models.Category{
+		Name: body.Name,
+	}
 
 	if err := database.DB.Create(&category).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal membuat kategori"})
@@ -85,4 +87,17 @@ func DeleteCategory(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "Kategori berhasil dihapus"})
+}
+
+// GET /categories/:id
+func GetCategory(c *gin.Context) {
+	id := c.Param("id")
+	var category models.Category
+
+	if err := database.DB.First(&category, id).Error; err != nil {
+		c.JSON(http.StatusNotFound, gin.H{"error": "Kategori tidak ditemukan"})
+		return
+	}
+
+	c.JSON(http.StatusOK, category)
 }

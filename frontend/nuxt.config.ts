@@ -39,5 +39,13 @@ export default defineNuxtConfig({
     }
   },
 
+  runtimeConfig: {
+  public: {
+    apiBase: "http://localhost:8080" // backend golang kamu
+  }
+},
+
   vite: { css: { preprocessorOptions: { } } }
+
+  
 })

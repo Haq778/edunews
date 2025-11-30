@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"time"
 
 	"edunews-backend/database"
 	"edunews-backend/handlers"
@@ -36,7 +37,7 @@ func main() {
 		dbHost, dbPort, dbUser, dbPass, dbName,
 	)
 
-	// Connect to DB
+	// Connect DB
 	database.Connect(dsn)
 
 	// Auto migrate
@@ -44,45 +45,61 @@ func main() {
 		log.Fatalf("AutoMigrate failed: %v", err)
 	}
 
-	// Setup Gin
 	r := gin.Default()
-	r.Use(cors.Default())
 
-	// Serve uploads
+	// ===============================
+	// FIX CORS PALING AMAN
+	// ===============================
+	r.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://localhost:3000"},
+		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization", "Accept"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		MaxAge:           12 * time.Hour,
+	}))
+
+	// Static files
 	r.Static("/uploads", "./public/uploads")
 
-	// Pastikan folder uploads/berita ada
+	// Ensure upload folder exists
 	uploadDir := "./public/uploads/berita"
 	if err := os.MkdirAll(uploadDir, os.ModePerm); err != nil {
 		log.Fatalf("Gagal membuat folder upload: %v", err)
 	}
 
-	// API group
+	// ===============================
+	// API ROUTES
+	// ===============================
 	api := r.Group("/api")
 	{
-		// Berita CRUD
+		// AUTH
+		api.POST("/auth/register", handlers.Register)
+		api.POST("/auth/login", handlers.Login)
+
+		// USERS
+		api.GET("/users", handlers.GetUsers)          // GET semua user, tanpa token
+		api.DELETE("/users/:id", handlers.DeleteUser) // DELETE user cepat, tanpa token
+		api.GET("/users/:id", handlers.GetUserByID)
+		api.PUT("/users/:id", handlers.UpdateUser)
+
+		// BERITA CRUD
 		api.GET("/berita", handlers.GetAllBerita)
 		api.GET("/berita/:id", handlers.GetBeritaByID)
 		api.POST("/berita", handlers.CreateBerita)
 		api.PUT("/berita/:id", handlers.UpdateBerita)
 		api.DELETE("/berita/:id", handlers.DeleteBerita)
 
-		// Category CRUD
+		// CATEGORY CRUD
 		api.GET("/categories", handlers.GetCategories)
+		api.GET("/categories/:id", handlers.GetCategory)
 		api.POST("/categories", handlers.CreateCategory)
 		api.PUT("/categories/:id", handlers.UpdateCategory)
 		api.DELETE("/categories/:id", handlers.DeleteCategory)
-
-		// Users read-only
-		api.GET("/users", handlers.GetUsers)
-
-		// Auth
-		api.POST("/register", handlers.Register)
-		api.POST("/login", handlers.Login)
 	}
 
-	// Run server
-	log.Printf("Server running at http://localhost:%s", port)
+	// Run Server
+	log.Printf("Server berjalan di http://localhost:%s", port)
 	if err := r.Run(":" + port); err != nil {
 		log.Fatalf("Server run failed: %v", err)
 	}

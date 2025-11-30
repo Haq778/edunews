@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"os"
 	"path/filepath"
+	"strconv"
 	"time"
 
 	"edunews-backend/database"
@@ -13,81 +14,112 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// GET /api/berita
 func GetAllBerita(c *gin.Context) {
-	var list []models.Berita
-	if err := database.DB.Order("created_at desc").Find(&list).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+	var berita []models.Berita
+
+	if err := database.DB.
+		Preload("Category").
+		Find(&berita).Error; err != nil {
+
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal mengambil berita"})
 		return
 	}
-	c.JSON(http.StatusOK, list)
+
+	c.JSON(http.StatusOK, berita)
 }
 
-// GET /api/berita/:id
 func GetBeritaByID(c *gin.Context) {
 	id := c.Param("id")
-	var b models.Berita
-	if err := database.DB.First(&b, id).Error; err != nil {
+
+	var berita models.Berita
+	if err := database.DB.
+		Preload("Category").
+		First(&berita, id).Error; err != nil {
+
 		c.JSON(http.StatusNotFound, gin.H{"error": "Berita tidak ditemukan"})
 		return
 	}
-	c.JSON(http.StatusOK, b)
+
+	c.JSON(http.StatusOK, berita)
 }
 
-// POST /api/berita  (multipart/form-data)
 func CreateBerita(c *gin.Context) {
 	title := c.PostForm("title")
-	category := c.PostForm("category")
+	cid := c.PostForm("category_id")
 	content := c.PostForm("content")
 	excerpt := c.PostForm("excerpt")
 
 	var coverFilename string
 	file, err := c.FormFile("cover")
 	if err == nil && file != nil {
-		// 🔥 FIX: Ubah ke ./public/uploads agar sinkron dengan static di main.go
-		uploadRoot := "./public/uploads" // Dari "./uploads"
+		uploadRoot := "./public/uploads"
 		outDir := filepath.Join(uploadRoot, "berita")
 		_ = os.MkdirAll(outDir, 0755)
 
 		coverFilename = fmt.Sprintf("%d_%s", time.Now().Unix(), filepath.Base(file.Filename))
 		dst := filepath.Join(outDir, coverFilename)
+
 		if err := c.SaveUploadedFile(file, dst); err != nil {
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal menyimpan file"})
+			c.JSON(500, gin.H{"error": "Gagal menyimpan file"})
 			return
 		}
 	}
 
 	b := models.Berita{
-		Title:     title,
-		Category:  category,
-		Content:   content,
-		Excerpt:   excerpt,
-		Cover:     coverFilename,
-		CreatedAt: time.Now(),
+		Title:      title,
+		CategoryID: parseUint(cid),
+		Content:    content,
+		Excerpt:    excerpt,
+		Cover:      coverFilename,
+		CreatedAt:  time.Now(),
 	}
 
 	if err := database.DB.Create(&b).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal menyimpan berita"})
+		c.JSON(500, gin.H{"error": err.Error()})
 		return
 	}
 
-	c.JSON(http.StatusOK, b)
+	c.JSON(200, b)
+}
+
+func parseUint(s string) uint {
+	v, _ := strconv.ParseUint(s, 10, 32)
+	return uint(v)
 }
 
 // PUT /api/berita/:id  (supports multipart or json)
 func UpdateBerita(c *gin.Context) {
 	id := c.Param("id")
+
 	var b models.Berita
 	if err := database.DB.First(&b, id).Error; err != nil {
 		c.JSON(http.StatusNotFound, gin.H{"error": "Berita tidak ditemukan"})
 		return
 	}
 
+	// =============================
+	// VALIDASI CATEGORY ID
+	// =============================
+	if v := c.PostForm("category_id"); v != "" {
+		cid := parseUint(v)
+
+		// Jika 0 → abaikan, jangan simpan karena 0 bukan kategori valid
+		if cid != 0 {
+			// Pastikan kategori benar-benar ada
+			var cat models.Category
+			if err := database.DB.First(&cat, cid).Error; err != nil {
+				c.JSON(http.StatusBadRequest, gin.H{
+					"error": "Kategori tidak valid",
+				})
+				return
+			}
+			b.CategoryID = cid
+		}
+	}
+
+	// FIELD LAIN
 	if v := c.PostForm("title"); v != "" {
 		b.Title = v
-	}
-	if v := c.PostForm("category"); v != "" {
-		b.Category = v
 	}
 	if v := c.PostForm("content"); v != "" {
 		b.Content = v
@@ -96,30 +128,42 @@ func UpdateBerita(c *gin.Context) {
 		b.Excerpt = v
 	}
 
+	// COVER (UPLOAD)
 	file, err := c.FormFile("cover")
 	if err == nil && file != nil {
-		// 🔥 FIX: Ubah ke ./public/uploads
-		uploadRoot := "./public/uploads" // Dari "./uploads"
+		uploadRoot := "./public/uploads"
 		outDir := filepath.Join(uploadRoot, "berita")
 		_ = os.MkdirAll(outDir, 0755)
 
 		coverFilename := fmt.Sprintf("%d_%s", time.Now().Unix(), filepath.Base(file.Filename))
 		dst := filepath.Join(outDir, coverFilename)
-		if err := c.SaveUploadedFile(file, dst); err == nil {
-			if b.Cover != "" {
-				_ = os.Remove(filepath.Join(outDir, b.Cover)) // hapus lama
-			}
-			b.Cover = coverFilename
+
+		if err := c.SaveUploadedFile(file, dst); err != nil {
+			c.JSON(500, gin.H{"error": "Gagal upload cover"})
+			return
 		}
+
+		// hapus file lama
+		if b.Cover != "" {
+			oldFile := filepath.Join(outDir, b.Cover)
+			_ = os.Remove(oldFile)
+		}
+
+		b.Cover = coverFilename
 	}
 
+	// SAVE
 	if err := database.DB.Save(&b).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal menyimpan perubahan"})
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Gagal menyimpan perubahan",
+			"detail": err.Error(),   // debug
+		})
 		return
 	}
 
 	c.JSON(http.StatusOK, b)
 }
+
 
 // DELETE /api/berita/:id
 func DeleteBerita(c *gin.Context) {

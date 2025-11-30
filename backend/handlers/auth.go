@@ -17,20 +17,26 @@ var jwtSecret = []byte("rahasia123")
 
 // =====================
 // REGISTER
-// POST /register
 // =====================
 func Register(c *gin.Context) {
 	var input struct {
 		Name     string `json:"name"`
 		Email    string `json:"email" binding:"required,email"`
-		Password string `json:"password" binding:"required"`
+		Password string `json:"password" binding:"required,min=5"`
 	}
+
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
 
-	// Hash password
+	// Cek duplicate email
+	var existing models.User
+	if err := database.DB.Where("email = ?", input.Email).First(&existing).Error; err == nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Email sudah terdaftar"})
+		return
+	}
+
 	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(input.Password), bcrypt.DefaultCost)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal hash password"})
@@ -46,30 +52,41 @@ func Register(c *gin.Context) {
 	}
 
 	if err := database.DB.Create(&user).Error; err != nil {
-		c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal membuat user"})
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Database error: " + err.Error(),
+		})
+		return
+	}
+
+	// Generate token for the newly registered user
+	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
+		"user_id": user.ID,
+		"role":    user.Role,
+		"exp":     time.Now().Add(72 * time.Hour).Unix(),
+	})
+
+	tokenString, err := token.SignedString(jwtSecret)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Gagal generate token"})
 		return
 	}
 
 	c.JSON(http.StatusCreated, gin.H{
 		"message": "User berhasil dibuat",
-		"user": gin.H{
-			"id":    user.ID,
-			"name":  user.Name,
-			"email": user.Email,
-			"role":  user.Role,
-		},
+		"token":   tokenString,
+		"user": gin.H{"id": user.ID, "name": user.Name, "email": user.Email, "role": user.Role},
 	})
 }
 
 // =====================
 // LOGIN
-// POST /login
 // =====================
 func Login(c *gin.Context) {
 	var input struct {
 		Email    string `json:"email" binding:"required,email"`
 		Password string `json:"password" binding:"required"`
 	}
+
 	if err := c.ShouldBindJSON(&input); err != nil {
 		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
@@ -86,7 +103,6 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	// Generate JWT token
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"user_id": user.ID,
 		"role":    user.Role,
@@ -106,15 +122,20 @@ func Login(c *gin.Context) {
 			"id":    user.ID,
 			"name":  user.Name,
 			"email": user.Email,
+			"role":  user.Role,
 		},
 	})
 }
 
-// =====================
-// JWT Middleware
-// =====================
 func AuthMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
+
+		// IZINKAN PRE-FLIGHT (OPTIONS)
+		if c.Request.Method == "OPTIONS" {
+			c.Next()
+			return
+		}
+
 		tokenString := c.GetHeader("Authorization")
 		if tokenString == "" {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Missing token"})
@@ -122,20 +143,18 @@ func AuthMiddleware() gin.HandlerFunc {
 			return
 		}
 
-		// Hapus prefix "Bearer " jika ada
 		tokenString = strings.TrimPrefix(tokenString, "Bearer ")
 
-		// Parse token
 		token, err := jwt.Parse(tokenString, func(token *jwt.Token) (interface{}, error) {
 			return jwtSecret, nil
 		})
+
 		if err != nil || !token.Valid {
 			c.JSON(http.StatusUnauthorized, gin.H{"error": "Invalid token"})
 			c.Abort()
 			return
 		}
 
-		// Simpan claim user_id & role ke context supaya bisa dipakai di handler lain
 		if claims, ok := token.Claims.(jwt.MapClaims); ok {
 			c.Set("user_id", claims["user_id"])
 			c.Set("role", claims["role"])
