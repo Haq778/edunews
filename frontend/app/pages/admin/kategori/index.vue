@@ -92,7 +92,7 @@
       </div>
     </div>
 
-    <!-- Categories Grid -->
+    <!-- Content Grid -->
     <div v-else class="space-y-4">
       <!-- Search and Filter -->
       <div class="glass-card rounded-xl p-4">
@@ -126,6 +126,8 @@
             >
               <option value="name">Nama A-Z</option>
               <option value="name-desc">Nama Z-A</option>
+              <option value="usage">Penggunaan Tertinggi</option>
+              <option value="usage-low">Penggunaan Terendah</option>
               <option value="newest">Terbaru</option>
               <option value="oldest">Terlama</option>
             </select>
@@ -190,37 +192,48 @@
               </h3>
               <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">ID: {{ kat.id }}</p>
             </div>
+            
+            <!-- Tombol Action yang lebih kecil dan jelas -->
             <div class="flex space-x-1 ml-2">
+              <!-- Edit Button -->
               <NuxtLink
                 :to="`/admin/kategori/edit/${kat.id}`"
-                class="p-1.5 bg-yellow-50 dark:bg-yellow-900/20 text-yellow-600 dark:text-yellow-400 rounded-lg hover:bg-yellow-100 dark:hover:bg-yellow-900/30 transition-all duration-300 hover:scale-110 transform group/edit"
+                class="inline-flex items-center gap-1 px-2 py-1 bg-gradient-to-r from-yellow-500/10 to-yellow-600/10 hover:from-yellow-500/20 hover:to-yellow-600/20 
+                       text-yellow-600 dark:text-yellow-400 text-[10px] font-medium rounded-md transition-all duration-200 
+                       border border-yellow-200 dark:border-yellow-800 hover:shadow-sm group/edit"
                 title="Edit Kategori"
               >
-                <svg class="w-3.5 h-3.5 group-hover/edit:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                <svg class="w-3 h-3 group-hover/edit:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
                 </svg>
+                <span class="font-semibold">Edit</span>
               </NuxtLink>
+              
+              <!-- Delete Button - TIDAK DISABLED -->
               <button
-                class="p-1.5 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/30 transition-all duration-300 hover:scale-110 transform group/delete"
-                @click="hapus(kat.id)"
+                @click="hapus(kat.id, kat.name, kat.usage_count)"
+                class="inline-flex items-center gap-1 px-2 py-1 bg-gradient-to-r from-red-500/10 to-red-600/10 hover:from-red-500/20 hover:to-red-600/20 
+                       text-red-600 dark:text-red-400 text-[10px] font-medium rounded-md transition-all duration-200 
+                       border border-red-200 dark:border-red-800 hover:shadow-sm group/delete"
                 title="Hapus Kategori"
               >
-                <svg class="w-3.5 h-3.5 group-hover/delete:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                <svg class="w-3 h-3 group-hover/delete:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
                 </svg>
+                <span class="font-semibold">Hapus</span>
               </button>
             </div>
           </div>
 
           <!-- Usage Stats -->
           <div class="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
-            <div class="flex items-center space-x-1">
+            <div class="flex items-center space-x-1" :class="getUsageColor(kat.usage_count)">
               <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
               </svg>
-              <span>{{ getRandomUsage() }} berita</span>
+              <span>{{ kat.usage_count || 0 }} berita</span>
             </div>
-            <div class="text-xs px-2 py-1 rounded-full bg-gray-100 dark:bg-gray-800">
+            <div class="text-[10px] px-1.5 py-0.5 rounded bg-gray-100 dark:bg-gray-800">
               {{ formatDate(kat.created_at) }}
             </div>
           </div>
@@ -234,26 +247,27 @@
       <div v-if="kategori.length > 0" class="glass-card rounded-xl p-4 mt-6">
         <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
           <div class="text-sm text-gray-600 dark:text-gray-400">
-            Total <span class="font-semibold text-green-600 dark:text-green-400">{{ kategori.length }}</span> kategori terdaftar
+            Total <span class="font-semibold text-green-600 dark:text-green-400">{{ kategori.length }}</span> kategori terdaftar • 
+            <span class="font-semibold text-blue-600 dark:text-blue-400">{{ totalUsage }}</span> total penggunaan
           </div>
           <div class="flex space-x-2">
             <button 
               @click="exportCategories"
-              class="inline-flex items-center space-x-2 px-3 py-2 text-sm bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-all duration-300"
+              class="inline-flex items-center gap-1 px-2 py-1.5 text-[10px] bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-md hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-all duration-300 border border-blue-200 dark:border-blue-800"
             >
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"></path>
               </svg>
               <span>Export</span>
             </button>
             <NuxtLink
               to="/admin/kategori/tambah"
-              class="inline-flex items-center space-x-2 px-3 py-2 text-sm bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 rounded-lg hover:bg-green-100 dark:hover:bg-green-900/30 transition-all duration-300"
+              class="inline-flex items-center gap-1 px-2 py-1.5 text-[10px] bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-400 rounded-md hover:bg-green-100 dark:hover:bg-green-900/30 transition-all duration-300 border border-green-200 dark:border-green-800"
             >
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path>
               </svg>
-              <span>Tambah Lainnya</span>
+              <span>Tambah</span>
             </NuxtLink>
           </div>
         </div>
@@ -293,6 +307,12 @@ const filteredKategori = computed(() => {
     case 'name-desc':
       filtered = [...filtered].sort((a, b) => b.name?.localeCompare(a.name));
       break;
+    case 'usage':
+      filtered = [...filtered].sort((a, b) => (b.usage_count || 0) - (a.usage_count || 0));
+      break;
+    case 'usage-low':
+      filtered = [...filtered].sort((a, b) => (a.usage_count || 0) - (b.usage_count || 0));
+      break;
     case 'newest':
       filtered = [...filtered].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
       break;
@@ -305,7 +325,7 @@ const filteredKategori = computed(() => {
 });
 
 const totalUsage = computed(() => {
-  return kategori.value.reduce((total, kat) => total + getRandomUsage(), 0);
+  return kategori.value.reduce((total, kat) => total + (kat.usage_count || 0), 0);
 });
 
 // Helper functions
@@ -323,8 +343,11 @@ const getCategoryColor = (id) => {
   return colors[id % colors.length];
 };
 
-const getRandomUsage = () => {
-  return Math.floor(Math.random() * 50) + 1; // Simulasi jumlah penggunaan
+const getUsageColor = (count) => {
+  if (count === 0) return 'text-gray-500';
+  if (count <= 5) return 'text-green-600 dark:text-green-400';
+  if (count <= 20) return 'text-blue-600 dark:text-blue-400';
+  return 'text-purple-600 dark:text-purple-400';
 };
 
 const formatDate = (dateString) => {
@@ -348,12 +371,33 @@ const exportCategories = () => {
   URL.revokeObjectURL(url);
 };
 
-// 🟢 FIX: Pakai endpoint backend Go yang benar
+// 🟢 LOAD KATEGORI DENGAN USAGE COUNT
 async function loadKategori() {
   loading.value = true;
   try {
     const res = await $fetch("http://localhost:8080/api/categories");
-    kategori.value = res;
+    
+    // Load usage count untuk setiap kategori
+    const categoriesWithUsage = await Promise.all(
+      res.map(async (category) => {
+        try {
+          // 🟢 AMBIL DATA PENGGUNAAN KATEGORI DARI BERITA
+          const usageRes = await $fetch(`http://localhost:8080/api/berita/count-by-category/${category.id}`);
+          return {
+            ...category,
+            usage_count: usageRes.count || 0
+          };
+        } catch (error) {
+          console.error(`Gagal load usage untuk kategori ${category.id}:`, error);
+          return {
+            ...category,
+            usage_count: 0
+          };
+        }
+      })
+    );
+    
+    kategori.value = categoriesWithUsage;
   } catch (err) {
     console.error("Gagal load kategori:", err);
   } finally {
@@ -363,9 +407,9 @@ async function loadKategori() {
 
 onMounted(loadKategori);
 
-// 🟢 FIX DELETE
-const hapus = async (id) => {
-  if (!confirm("Yakin ingin hapus kategori?")) return;
+// 🟢 DELETE DENGAN PESAN KONFIRMASI YANG INFORMATIF
+const hapus = async (id, name, usageCount) => {
+  if (!confirm(`Yakin ingin menghapus kategori "${name}"? ${usageCount > 0 ? `\n\n⚠️ PERHATIAN: Kategori ini masih digunakan oleh ${usageCount} berita.` : ''}`)) return;
 
   try {
     await $fetch(`http://localhost:8080/api/categories/${id}`, {
@@ -375,6 +419,7 @@ const hapus = async (id) => {
     kategori.value = kategori.value.filter((k) => k.id !== id);
   } catch (err) {
     alert("Gagal menghapus kategori");
+    console.error("Error deleting category:", err);
   }
 };
 </script>

@@ -279,7 +279,7 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted, computed } from 'vue'
+import { ref, watch, onMounted, computed, h } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useAuth } from '~/composables/useAuth'
 
@@ -289,43 +289,67 @@ const route = useRoute()
 const router = useRouter()
 const auth = useAuth()
 
-// Navigation items with icons
+// Icon components menggunakan h() function
+const NewsIcon = () => h('svg', {
+  class: 'w-5 h-5',
+  fill: 'none',
+  stroke: 'currentColor',
+  viewBox: '0 0 24 24'
+}, [
+  h('path', {
+    'stroke-linecap': 'round',
+    'stroke-linejoin': 'round',
+    'stroke-width': '2',
+    'd': 'M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9m0 0v3m0-3a2 2 0 012-2h2a2 2 0 012 2m-6 5v6m4-3H9'
+  })
+])
+
+const CategoryIcon = () => h('svg', {
+  class: 'w-5 h-5',
+  fill: 'none',
+  stroke: 'currentColor',
+  viewBox: '0 0 24 24'
+}, [
+  h('path', {
+    'stroke-linecap': 'round',
+    'stroke-linejoin': 'round',
+    'stroke-width': '2',
+    'd': 'M4 6h16M4 10h16M4 14h16M4 18h16'
+  })
+])
+
+const UsersIcon = () => h('svg', {
+  class: 'w-5 h-5',
+  fill: 'none',
+  stroke: 'currentColor',
+  viewBox: '0 0 24 24'
+}, [
+  h('path', {
+    'stroke-linecap': 'round',
+    'stroke-linejoin': 'round',
+    'stroke-width': '2',
+    'd': 'M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z'
+  })
+])
+
+// Navigation items dengan icon components
 const navigation = [
   {
     name: 'Manajemen Berita',
     path: '/admin/berita',
-    icon: 'NewsIcon'
+    icon: NewsIcon
   },
   {
     name: 'Manajemen Kategori',
     path: '/admin/kategori',
-    icon: 'CategoryIcon'
+    icon: CategoryIcon
   },
   {
     name: 'Manajemen User',
     path: '/admin/users',
-    icon: 'UsersIcon'
+    icon: UsersIcon
   }
 ]
-
-// Icon components
-const NewsIcon = {
-  template: `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9m0 0v3m0-3a2 2 0 012-2h2a2 2 0 012 2m-6 5v6m4-3H9"></path>
-  </svg>`
-}
-
-const CategoryIcon = {
-  template: `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 10h16M4 14h16M4 18h16"></path>
-  </svg>`
-}
-
-const UsersIcon = {
-  template: `<svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
-    <path stroke-width="2" stroke-linecap="round" stroke-linejoin="round" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
-  </svg>`
-}
 
 const isAdmin = computed(() => {
   return auth.user.value?.role === 'admin'
@@ -617,4 +641,4 @@ aside ::-webkit-scrollbar-thumb:hover {
 .hover-scale-102:hover {
   transform: scale(1.02);
 }
-</style>  
+</style>

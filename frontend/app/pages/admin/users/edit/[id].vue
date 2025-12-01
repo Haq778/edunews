@@ -1,77 +1,206 @@
 <template>
-  <div class="container">
-    <div class="card">
-      <div class="card-header">
-        <h2>
-          <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"></path>
-          </svg>
-          Edit User
-        </h2>
-      </div>
+  <div class="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 py-8">
+    <div class="max-w-xl mx-auto px-4 sm:px-6 lg:px-8">
       
-      <div class="card-body">
-        <div v-if="error" class="alert alert-error">
-          {{ error }}
-        </div>
-        
-        <form @submit.prevent="save">
-          <div class="form-group">
-            <label class="form-label">Nama</label>
-            <input 
-              v-model="name" 
-              type="text" 
-              class="form-control" 
-              placeholder="Masukkan nama lengkap"
-              required
-            />
-          </div>
-          
-          <div class="form-group">
-            <label class="form-label">Email</label>
-            <input 
-              v-model="email" 
-              type="email" 
-              class="form-control" 
-              placeholder="Masukkan alamat email"
-              required
-            />
-          </div>
-          
-          <div class="form-group">
-            <label class="form-label">Role</label>
-            <select v-model="role" class="form-select">
-              <option value="admin">Admin</option>
-              <option value="user">User</option>
-            </select>
-          </div>
-          
-          <div class="action-buttons">
+      <!-- Header dengan gradient menarik -->
+      <div class="mb-10 relative">
+        <div class="absolute -inset-4 bg-gradient-to-r from-indigo-500/10 to-purple-500/10 dark:from-indigo-500/5 dark:to-purple-500/5 rounded-2xl blur-xl"></div>
+        <div class="relative bg-gradient-to-r from-indigo-600 to-purple-600 rounded-2xl p-6 shadow-lg">
+          <div class="flex items-center gap-4">
             <button 
-              type="button" 
-              class="btn btn-secondary"
               @click="goBack"
+              class="p-2 bg-white/20 hover:bg-white/30 backdrop-blur-sm text-white 
+                     rounded-xl transition-all duration-300 hover:scale-105"
+              aria-label="Kembali"
             >
-              <svg class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
               </svg>
-              Kembali
             </button>
-            
-            <button
-              type="submit"
-              :disabled="loading"
-              class="btn btn-primary"
-            >
-              <span v-if="loading" class="loading-spinner"></span>
-              <svg v-else class="icon" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
-              </svg>
-              {{ loading ? 'Menyimpan...' : 'Simpan Perubahan' }}
-            </button>
+            <div class="flex-1">
+              <h1 class="text-2xl md:text-3xl font-bold text-white drop-shadow-md flex items-center gap-3">
+                <div class="p-2 bg-white/20 backdrop-blur-sm rounded-lg">
+                  <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                  </svg>
+                </div>
+                Edit User
+              </h1>
+              <p class="text-indigo-100 mt-2">
+                Perbarui informasi pengguna dengan data terbaru
+              </p>
+            </div>
           </div>
-        </form>
+        </div>
       </div>
+
+      <!-- Form Card -->
+      <div class="relative group">
+        <!-- Background effect -->
+        <div class="absolute -inset-1 bg-gradient-to-r from-indigo-400 to-purple-500 rounded-2xl blur opacity-20 group-hover:opacity-30 transition duration-1000"></div>
+        
+        <!-- Main Card -->
+        <div class="relative bg-gradient-to-br from-white to-indigo-50 dark:from-gray-800 dark:to-gray-900 
+                    rounded-2xl shadow-xl border border-indigo-100 dark:border-gray-700 overflow-hidden">
+          
+          <!-- Card Header -->
+          <div class="bg-gradient-to-r from-indigo-500/10 to-purple-500/10 dark:from-indigo-500/5 dark:to-purple-500/5 
+                      px-6 py-5 border-b border-indigo-100 dark:border-gray-700">
+            <div class="flex items-center gap-3">
+              <div class="p-2 bg-gradient-to-r from-indigo-500 to-purple-600 rounded-lg">
+                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/>
+                </svg>
+              </div>
+              <div>
+                <h2 class="text-lg font-bold bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent">
+                  Formulir Pengguna
+                </h2>
+                <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">
+                  Isi semua informasi yang diperlukan
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Form Content -->
+          <div class="p-6 md:p-8">
+            <!-- Error Alert -->
+            <div v-if="error" class="mb-6 p-4 bg-gradient-to-r from-red-50 to-orange-50 dark:from-red-900/20 dark:to-orange-900/20 
+                         border-l-4 border-red-500 rounded-r-lg">
+              <div class="flex items-start gap-3">
+                <svg class="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+                <p class="text-sm text-red-700 dark:text-red-300">{{ error }}</p>
+              </div>
+            </div>
+
+            <form @submit.prevent="save" class="space-y-6">
+              <!-- Nama -->
+              <div class="space-y-2">
+                <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+                  <div class="w-2 h-5 bg-gradient-to-b from-indigo-500 to-purple-500 rounded-full"></div>
+                  Nama Lengkap <span class="text-red-500">*</span>
+                </label>
+                <input 
+                  v-model="name" 
+                  type="text" 
+                  class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 dark:border-gray-700 
+                         bg-white dark:bg-gray-800 text-gray-900 dark:text-white
+                         focus:border-indigo-500 focus:ring-4 focus:ring-indigo-500/20 focus:outline-none
+                         transition-all duration-300 placeholder-gray-400 dark:placeholder-gray-500
+                         hover:border-indigo-300 dark:hover:border-indigo-500"
+                  placeholder="Masukkan nama lengkap pengguna"
+                  required
+                />
+              </div>
+
+              <!-- Email -->
+              <div class="space-y-2">
+                <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+                  <div class="w-2 h-5 bg-gradient-to-b from-blue-500 to-cyan-500 rounded-full"></div>
+                  Alamat Email <span class="text-red-500">*</span>
+                </label>
+                <input 
+                  v-model="email" 
+                  type="email" 
+                  class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 dark:border-gray-700 
+                         bg-white dark:bg-gray-800 text-gray-900 dark:text-white
+                         focus:border-blue-500 focus:ring-4 focus:ring-blue-500/20 focus:outline-none
+                         transition-all duration-300 placeholder-gray-400 dark:placeholder-gray-500
+                         hover:border-blue-300 dark:hover:border-blue-500"
+                  placeholder="Masukkan alamat email aktif"
+                  required
+                />
+              </div>
+
+              <!-- Role -->
+              <div class="space-y-2">
+                <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 flex items-center gap-2">
+                  <div class="w-2 h-5 bg-gradient-to-b from-emerald-500 to-teal-500 rounded-full"></div>
+                  Role Pengguna <span class="text-red-500">*</span>
+                </label>
+                <div class="relative">
+                  <select 
+                    v-model="role" 
+                    class="w-full px-4 py-3 rounded-lg border-2 border-gray-200 dark:border-gray-700 
+                           bg-white dark:bg-gray-800 text-gray-900 dark:text-white
+                           focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/20 focus:outline-none
+                           transition-all duration-300 appearance-none
+                           hover:border-emerald-300 dark:hover:border-emerald-500"
+                  >
+                    <option value="user" class="text-gray-900 dark:text-white">User</option>
+                    <option value="admin" class="text-gray-900 dark:text-white">Admin</option>
+                  </select>
+                  <div class="absolute right-4 top-1/2 transform -translate-y-1/2 pointer-events-none">
+                    <svg class="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                    </svg>
+                  </div>
+                </div>
+                <p class="text-xs text-gray-500 dark:text-gray-400 mt-2">
+                  Pilih peran untuk menentukan hak akses pengguna
+                </p>
+              </div>
+
+              <!-- Action Buttons -->
+              <div class="flex flex-col sm:flex-row gap-4 pt-8 border-t border-gray-100 dark:border-gray-700">
+                <button
+                  type="button"
+                  @click="goBack"
+                  class="flex-1 px-6 py-3.5 bg-gradient-to-r from-gray-100 to-gray-200 hover:from-gray-200 hover:to-gray-300 
+                         dark:bg-gradient-to-r dark:from-gray-700 dark:to-gray-800 dark:hover:from-gray-600 dark:hover:to-gray-700
+                         text-gray-700 dark:text-gray-300 font-semibold rounded-lg transition-all duration-300
+                         focus:outline-none focus:ring-4 focus:ring-gray-400/20
+                         transform hover:-translate-y-0.5 active:translate-y-0"
+                >
+                  <span class="flex items-center justify-center gap-3">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+                    </svg>
+                    Kembali
+                  </span>
+                </button>
+                
+                <button
+                  type="submit"
+                  :disabled="loading"
+                  class="flex-1 px-6 py-3.5 bg-gradient-to-r from-indigo-500 to-purple-600 hover:from-indigo-600 hover:to-purple-700
+                         text-white font-semibold rounded-lg transition-all duration-300
+                         focus:outline-none focus:ring-4 focus:ring-purple-500/30
+                         disabled:opacity-50 disabled:cursor-not-allowed
+                         transform hover:-translate-y-0.5 active:translate-y-0
+                         shadow-lg hover:shadow-xl"
+                >
+                  <span class="flex items-center justify-center gap-3">
+                    <svg v-if="loading" class="w-5 h-5 animate-spin" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/>
+                    </svg>
+                    <svg v-else class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+                    </svg>
+                    {{ loading ? 'Menyimpan...' : 'Simpan Perubahan' }}
+                  </span>
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+
+      <!-- Info Footer -->
+      <div class="mt-8 text-center">
+        <p class="text-sm text-gray-500 dark:text-gray-400">
+          <span class="inline-flex items-center gap-2">
+            <svg class="w-4 h-4 text-emerald-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            Pastikan informasi pengguna sudah benar sebelum disimpan
+          </span>
+        </p>
+      </div>
+
     </div>
   </div>
 </template>
@@ -143,167 +272,13 @@ const goBack = () => {
 </script>
 
 <style scoped>
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+/* Animation untuk focus state */
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
 }
 
-.container {
-  max-width: 500px;
-  margin: 2rem auto;
-  padding: 0 1rem;
-}
-
-.card {
-  background: white;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-  overflow: hidden;
-}
-
-.card-header {
-  padding: 1.5rem;
-  border-bottom: 1px solid #eaeaea;
-  background: linear-gradient(135deg, #4f46e5, #7c3aed);
-  color: white;
-}
-
-.card-header h2 {
-  font-size: 1.5rem;
-  font-weight: 600;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.card-body {
-  padding: 1.5rem;
-}
-
-.form-group {
-  margin-bottom: 1.5rem;
-}
-
-.form-label {
-  display: block;
-  margin-bottom: 0.5rem;
-  font-weight: 500;
-  color: #4b5563;
-}
-
-.form-control {
-  width: 100%;
-  padding: 0.75rem 1rem;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  font-size: 1rem;
-  transition: all 0.2s ease;
-}
-
-.form-control:focus {
-  outline: none;
-  border-color: #4f46e5;
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
-}
-
-.form-select {
-  width: 100%;
-  padding: 0.75rem 1rem;
-  border: 1px solid #d1d5db;
-  border-radius: 8px;
-  font-size: 1rem;
-  background-color: white;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.form-select:focus {
-  outline: none;
-  border-color: #4f46e5;
-  box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
-}
-
-.btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
-  font-size: 1rem;
-  font-weight: 500;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s ease;
-}
-
-.btn-primary {
-  background-color: #4f46e5;
-  color: white;
-}
-
-.btn-primary:hover:not(:disabled) {
-  background-color: #4338ca;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(79, 70, 229, 0.3);
-}
-
-.btn-primary:disabled {
-  background-color: #9ca3af;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
-}
-
-.btn-secondary {
-  background-color: #6b7280;
-  color: white;
-  margin-right: 0.75rem;
-}
-
-.btn-secondary:hover {
-  background-color: #4b5563;
-}
-
-.action-buttons {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 2rem;
-}
-
-.loading-spinner {
-  display: inline-block;
-  width: 1rem;
-  height: 1rem;
-  border: 2px solid transparent;
-  border-top: 2px solid currentColor;
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-}
-
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-.alert {
-  padding: 0.75rem 1rem;
-  border-radius: 8px;
-  margin-bottom: 1.5rem;
-  font-size: 0.9rem;
-}
-
-.alert-error {
-  background-color: #fee2e2;
-  color: #dc2626;
-  border-left: 4px solid #dc2626;
-}
-
-.icon {
-  width: 1.25rem;
-  height: 1.25rem;
+.animate-fade-in {
+  animation: fadeIn 0.3s ease-out;
 }
 </style>

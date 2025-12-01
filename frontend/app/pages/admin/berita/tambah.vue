@@ -1,26 +1,31 @@
 <template>
   <div class="min-h-screen bg-gray-50 dark:bg-gray-900 py-8">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6">
 
-      <!-- Header -->
-      <div class="flex items-center justify-between mb-8">
-        <div>
-          <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Tambah Berita Baru</h1>
-          <p class="text-gray-600 dark:text-gray-400">Buat artikel berita terbaru</p>
+      <!-- Header yang lebih minimalis -->
+      <div class="mb-10">
+        <div class="flex items-center gap-4 mb-2">
+          <button 
+            @click="goBack"
+            class="p-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
+            aria-label="Kembali"
+          >
+            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/>
+            </svg>
+          </button>
+          <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Tambah Berita Baru</h1>
         </div>
-
-        <button @click="goBack" class="px-4 py-2 text-gray-600 dark:text-gray-300">
-          Kembali
-        </button>
+        <p class="text-gray-600 dark:text-gray-400 ml-12">Buat artikel berita terbaru untuk ditampilkan</p>
       </div>
 
-      <!-- Card -->
-      <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border">
-        <div class="p-6">
+      <!-- Form Card dengan desain lebih bersih -->
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700">
+        <div class="p-6 md:p-8">
           <ArticleForm
             :modelValue="{}"
             :categories="categories"
-            submitText="Tambah Berita"
+            submitText="Simpan Berita"
             :loading="loading"
             @save="save"
             @cancel="goBack"
@@ -28,11 +33,13 @@
         </div>
       </div>
 
-      <!-- Loading Overlay -->
-      <div v-if="loading" class="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-        <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl">
-          <div class="animate-spin h-12 w-12 border-b-2 border-blue-600 rounded-full mx-auto"></div>
-          <p class="text-center mt-4 text-gray-700 dark:text-gray-300">Menyimpan...</p>
+      <!-- Loading Overlay yang lebih halus -->
+      <div v-if="loading" class="fixed inset-0 bg-black/40 backdrop-blur-sm flex items-center justify-center z-50">
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl shadow-xl min-w-[200px]">
+          <div class="flex flex-col items-center gap-3">
+            <div class="animate-spin h-8 w-8 border-2 border-blue-500 border-t-transparent rounded-full"></div>
+            <p class="text-sm text-gray-600 dark:text-gray-300">Menyimpan berita...</p>
+          </div>
         </div>
       </div>
 

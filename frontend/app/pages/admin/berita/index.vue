@@ -242,30 +242,40 @@
               {{ item.title }}
             </h3>
             
+            <!-- Tombol Action yang lebih kecil dan rapi -->
             <div class="flex items-center justify-between pt-2 border-t border-gray-200 dark:border-gray-700">
-              <div class="flex space-x-1">
+              <div class="flex space-x-1.5">
+                <!-- Edit Button yang lebih kecil -->
                 <NuxtLink 
                   :to="`/admin/berita/edit/${item.id}`"
-                  class="p-2 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-all duration-300 hover:scale-110 transform group/edit"
+                  class="inline-flex items-center gap-1 px-2 py-1 bg-gradient-to-r from-blue-500/10 to-blue-600/10 hover:from-blue-500/20 hover:to-blue-600/20 
+                         text-blue-600 dark:text-blue-400 text-[10px] font-medium rounded-md transition-all duration-200 
+                         border border-blue-200 dark:border-blue-800 hover:shadow-sm group/edit"
                   title="Edit Berita"
                 >
-                  <svg class="w-4 h-4 group-hover/edit:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                  <svg class="w-3 h-3 group-hover/edit:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
                   </svg>
+                  <span class="font-semibold">Edit</span>
                 </NuxtLink>
                 
+                <!-- Delete Button yang lebih kecil -->
                 <button
                   @click="hapus(item.id)"
-                  class="p-2 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/30 transition-all duration-300 hover:scale-110 transform group/delete"
+                  class="inline-flex items-center gap-1 px-2 py-1 bg-gradient-to-r from-red-500/10 to-red-600/10 hover:from-red-500/20 hover:to-red-600/20 
+                         text-red-600 dark:text-red-400 text-[10px] font-medium rounded-md transition-all duration-200 
+                         border border-red-200 dark:border-red-800 hover:shadow-sm group/delete"
                   title="Hapus Berita"
                 >
-                  <svg class="w-4 h-4 group-hover/delete:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                  <svg class="w-3 h-3 group-hover/delete:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                   </svg>
+                  <span class="font-semibold">Hapus</span>
                 </button>
               </div>
               
-              <div class="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded">
+              <!-- Date -->
+              <div class="text-[10px] text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded">
                 {{ formatDate(item.created_at) }}
               </div>
             </div>

@@ -90,6 +90,9 @@ func main() {
 		api.PUT("/berita/:id", handlers.UpdateBerita)
 		api.DELETE("/berita/:id", handlers.DeleteBerita)
 
+		// 🟢 TAMBAHKAN INI - Route untuk hitung berita per kategori
+		api.GET("/berita/count-by-category/:id", handlers.GetNewsCountByCategory)
+
 		// CATEGORY CRUD
 		api.GET("/categories", handlers.GetCategories)
 		api.GET("/categories/:id", handlers.GetCategory)

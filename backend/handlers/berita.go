@@ -155,15 +155,14 @@ func UpdateBerita(c *gin.Context) {
 	// SAVE
 	if err := database.DB.Save(&b).Error; err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{
-			"error": "Gagal menyimpan perubahan",
-			"detail": err.Error(),   // debug
+			"error":  "Gagal menyimpan perubahan",
+			"detail": err.Error(), // debug
 		})
 		return
 	}
 
 	c.JSON(http.StatusOK, b)
 }
-
 
 // DELETE /api/berita/:id
 func DeleteBerita(c *gin.Context) {
@@ -188,4 +187,22 @@ func DeleteBerita(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"message": "Berita dihapus"})
+}
+
+// Handler untuk menghitung berita per kategori
+func GetNewsCountByCategory(c *gin.Context) {
+	categoryID := c.Param("id")
+
+	var count int64
+	err := database.DB.Model(&models.Berita{}).Where("category_id = ?", categoryID).Count(&count).Error
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{
+			"error": "Gagal menghitung berita untuk kategori ini",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"count": count,
+	})
 }
