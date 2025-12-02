@@ -55,6 +55,7 @@
           </button>
           
           
+          
         </div>
       </div>
     </div>
@@ -285,7 +286,16 @@
           </div>
           <h3 class="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-2 sm:mb-3">Belum Ada User</h3>
           <p class="text-gray-600 dark:text-gray-300 text-xs sm:text-sm mb-4 sm:mb-6">Mulai dengan menambahkan user pertama ke sistem</p>
-          
+          <!-- TAMBAH TOMBOL TAMBAH USER DI EMPTY STATE -->
+          <NuxtLink 
+            to="/admin/users/tambah" 
+            class="inline-flex items-center justify-center space-x-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-2.5 sm:px-6 sm:py-3 rounded-lg sm:rounded-xl hover:shadow-lg transition-all duration-300 hover:scale-105 transform font-semibold text-xs sm:text-sm w-full sm:w-auto"
+          >
+            <svg class="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+            </svg>
+            <span>Tambah User Pertama</span>
+          </NuxtLink>
         </div>
       </div>
 
@@ -573,33 +583,70 @@ const exportUsers = () => {
   URL.revokeObjectURL(url)
 }
 
-// Load semua user
+// Load semua user - DIPERBAIKI
 async function loadUsers() {
   loading.value = true
   try {
-    const res: any = await $fetch('http://localhost:8080/api/users')
-    users.value = Array.isArray(res) ? res : []
-  } catch (e: any) {
-    alert('Gagal memuat users: ' + (e?.message || e))
+    console.log('Loading users...')
+    const response = await fetch('http://localhost:8080/api/users', {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      }
+    })
+    
+    console.log('Response status:', response.status)
+    
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`)
+    }
+    
+    const data = await response.json()
+    console.log('Users data:', data)
+    
+    users.value = Array.isArray(data) ? data : []
+    console.log('Total users loaded:', users.value.length)
+    
+  } catch (error: any) {
+    console.error('Error loading users:', error)
+    alert(`Gagal memuat users: ${error?.message || 'Unknown error'}`)
+    users.value = []
   } finally {
     loading.value = false
+    console.log('Loading finished')
   }
 }
 
-// Hapus user
+// Hapus user - DIPERBAIKI
 async function hapus(id: number | string) {
   if (!confirm('Yakin ingin menghapus user ini?')) return
 
   try {
-    const res = await fetch(`http://localhost:8080/api/users/${id}`, { method: 'DELETE' })
-    if (!res.ok) {
-      const errJSON = await res.json().catch(() => null)
-      throw new Error(errJSON?.error || errJSON?.message || `Hapus gagal (HTTP ${res.status})`)
+    console.log('Deleting user ID:', id)
+    const response = await fetch(`http://localhost:8080/api/users/${id}`, { 
+      method: 'DELETE',
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    })
+    
+    console.log('Delete response status:', response.status)
+    
+    if (!response.ok) {
+      const errorText = await response.text()
+      console.error('Delete error response:', errorText)
+      throw new Error(`Hapus gagal (HTTP ${response.status}): ${errorText}`)
     }
+    
+    // Remove from local state
     users.value = users.value.filter(u => String(u.id) !== String(id))
     alert('User berhasil dihapus.')
-  } catch (e: any) {
-    alert('Gagal menghapus user: ' + (e?.message || e))
+    console.log('User deleted successfully')
+    
+  } catch (error: any) {
+    console.error('Error deleting user:', error)
+    alert(`Gagal menghapus user: ${error?.message || 'Unknown error'}`)
   }
 }
 
