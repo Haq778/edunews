@@ -1,82 +1,130 @@
 <template>
-  <div class="p-6 max-w-8xl mx-auto space-y-6">
+  <div class="p-4 sm:p-6 max-w-8xl mx-auto space-y-4 sm:space-y-6">
 
-    <!-- Header dengan Glass Effect -->
-    <div class="glass-card rounded-2xl p-6 border-l-4 border-l-purple-500">
-      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between">
-        <div class="mb-4 lg:mb-0">
-          <div class="flex items-center space-x-3 mb-3">
-            <div class="p-2 bg-gradient-to-br from-purple-500/10 to-pink-600/10 rounded-xl">
-              <svg class="w-6 h-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <!-- Header dengan Glass Effect - Responsif -->
+    <div class="glass-card rounded-xl sm:rounded-2xl p-4 sm:p-6 border-l-4 border-l-purple-500">
+      <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
+        <div class="flex-1 min-w-0">
+          <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-3 space-y-2 sm:space-y-0 mb-3">
+            <div class="p-2 bg-gradient-to-br from-purple-500/10 to-pink-600/10 rounded-xl self-start sm:self-auto">
+              <svg class="w-5 h-5 sm:w-6 sm:h-6 text-purple-600 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
               </svg>
             </div>
-            <div>
-              <h1 class="text-2xl lg:text-3xl font-bold bg-gradient-to-r from-gray-900 to-purple-900 dark:from-white dark:to-purple-200 bg-clip-text text-transparent">
+            <div class="flex-1 min-w-0">
+              <h1 class="text-xl sm:text-2xl lg:text-3xl font-bold bg-gradient-to-r from-gray-900 to-purple-900 dark:from-white dark:to-purple-200 bg-clip-text text-transparent leading-tight">
                 Manajemen Users
               </h1>
-              <p class="text-gray-600 dark:text-gray-300 mt-1 text-sm">Kelola pengguna dan akses sistem dengan mudah</p>
+              <p class="text-gray-600 dark:text-gray-300 mt-1 text-xs sm:text-sm truncate">Kelola pengguna dan akses sistem dengan mudah</p>
             </div>
           </div>
           
-          <!-- Quick Stats -->
-          <div class="flex items-center space-x-4 text-sm text-gray-500 dark:text-gray-400">
+          <!-- Quick Stats - Responsif -->
+          <div class="flex flex-wrap items-center gap-2 sm:gap-4 text-xs sm:text-sm text-gray-500 dark:text-gray-400">
             <div class="flex items-center space-x-1">
-              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0zm6 3a2 2 0 11-4 0 2 2 0 014 0zM7 10a2 2 0 11-4 0 2 2 0 014 0z"></path>
               </svg>
               <span>{{ users.length }} Total Users</span>
             </div>
             <div class="flex items-center space-x-1">
-              <svg class="w-4 h-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-3 h-3 sm:w-4 sm:h-4 text-purple-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"></path>
               </svg>
               <span>{{ adminCount }} Admin</span>
             </div>
             <div class="flex items-center space-x-1">
-              <svg class="w-4 h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg class="w-3 h-3 sm:w-4 sm:h-4 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
               </svg>
               <span>{{ editorCount }} Editor</span>
             </div>
+            
           </div>
         </div>
 
-        <div class="flex space-x-3">
+        <div class="flex flex-col sm:flex-row sm:space-x-3 space-y-2 sm:space-y-0 w-full sm:w-auto">
           <button 
             @click="exportUsers"
-            class="group inline-flex items-center space-x-2 px-4 py-2.5 bg-white/50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-xl hover:bg-white dark:hover:bg-gray-800 transition-all duration-300 text-sm font-medium text-gray-700 dark:text-gray-300"
+            class="group inline-flex items-center justify-center sm:justify-start space-x-2 px-3 py-2 sm:px-4 sm:py-2.5 bg-white/50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-lg sm:rounded-xl hover:bg-white dark:hover:bg-gray-800 transition-all duration-300 text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-300 w-full sm:w-auto"
           >
-            <svg class="w-4 h-4 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-3 h-3 sm:w-4 sm:h-4 group-hover:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"></path>
             </svg>
             <span>Export</span>
           </button>
           
-        
+          
         </div>
       </div>
     </div>
 
-    <!-- Loading Animation -->
-    <div v-if="loading" class="glass-card rounded-2xl p-8 text-center">
-      <div class="flex flex-col items-center justify-center space-y-4">
+    <!-- Mobile Search and Filter -->
+    <div v-if="users.length > 0" class="lg:hidden glass-card rounded-xl p-3 space-y-3">
+      <div class="relative">
+        <input 
+          v-model="searchQuery"
+          type="text" 
+          placeholder="Cari user..." 
+          class="w-full pl-9 pr-4 py-2 bg-white/50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-lg focus:ring-2 focus:ring-purple-500 focus:border-transparent transition-all duration-300 text-sm"
+        >
+        <svg class="absolute left-3 top-1/2 transform -translate-y-1/2 w-3.5 h-3.5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+        <button 
+          v-if="searchQuery" 
+          @click="searchQuery = ''"
+          class="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
+        >
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      
+      <div class="flex space-x-2">
+        <button
+          @click="isFilterOpen = !isFilterOpen"
+          class="flex-1 inline-flex items-center justify-center space-x-1 px-3 py-2 bg-white/50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-white dark:hover:bg-gray-800 transition-all duration-300 text-xs font-medium text-gray-700 dark:text-gray-300"
+        >
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z"></path>
+          </svg>
+          <span>Filter</span>
+        </button>
+        
+        <!-- Mobile View Toggle -->
+        <button
+          @click="toggleViewMode"
+          class="inline-flex items-center justify-center px-3 py-2 bg-white/50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-lg hover:bg-white dark:hover:bg-gray-800 transition-all duration-300 text-xs font-medium text-gray-700 dark:text-gray-300"
+        >
+          <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path v-if="viewMode === 'grid'" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+            <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Loading Animation - Responsif -->
+    <div v-if="loading" class="glass-card rounded-xl sm:rounded-2xl p-6 sm:p-8 text-center">
+      <div class="flex flex-col items-center justify-center space-y-3 sm:space-y-4">
         <div class="relative">
-          <div class="w-16 h-16 border-4 border-purple-200 dark:border-purple-800 rounded-full"></div>
-          <div class="absolute top-0 left-0 w-16 h-16 border-4 border-transparent border-t-purple-600 rounded-full animate-spin"></div>
-          <div class="absolute top-1 left-1 w-14 h-14 border-4 border-transparent border-b-pink-600 rounded-full animate-spin animation-delay-500"></div>
+          <div class="w-12 h-12 sm:w-16 sm:h-16 border-4 border-purple-200 dark:border-purple-800 rounded-full"></div>
+          <div class="absolute top-0 left-0 w-12 h-12 sm:w-16 sm:h-16 border-4 border-transparent border-t-purple-600 rounded-full animate-spin"></div>
+          <div class="absolute top-1 left-1 w-10 h-10 sm:w-14 sm:h-14 border-4 border-transparent border-b-pink-600 rounded-full animate-spin animation-delay-500"></div>
         </div>
         <div>
-          <p class="text-lg font-semibold text-gray-700 dark:text-gray-300 mb-1">Memuat Data User</p>
-          <p class="text-sm text-gray-500 dark:text-gray-400">Menyiapkan informasi pengguna...</p>
+          <p class="text-base sm:text-lg font-semibold text-gray-700 dark:text-gray-300 mb-1">Memuat Data User</p>
+          <p class="text-xs sm:text-sm text-gray-500 dark:text-gray-400">Menyiapkan informasi pengguna...</p>
         </div>
       </div>
     </div>
 
     <!-- Content -->
-    <div v-else class="space-y-4">
-      <!-- Search and Filter -->
-      <div class="glass-card rounded-xl p-4">
+    <div v-else class="space-y-3 sm:space-y-4">
+      <!-- Search and Filter Desktop -->
+      <div class="hidden lg:block glass-card rounded-xl p-4">
         <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between space-y-3 lg:space-y-0">
           <div class="flex-1 max-w-md">
             <div class="relative">
@@ -141,23 +189,83 @@
         </div>
       </div>
 
-      <!-- No Search Results -->
-      <div v-if="!loading && users.length > 0 && filteredUsers.length === 0" class="glass-card rounded-xl p-8 text-center">
+      <!-- Mobile Filter Panel -->
+      <Transition
+        enter-active-class="transition-all duration-300 ease-out"
+        enter-from-class="opacity-0 transform -translate-y-2"
+        enter-to-class="opacity-100 transform translate-y-0"
+        leave-active-class="transition-all duration-300 ease-in"
+        leave-from-class="opacity-100 transform translate-y-0"
+        leave-to-class="opacity-0 transform -translate-y-2"
+      >
+        <div 
+          v-if="isFilterOpen"
+          class="lg:hidden glass-card rounded-xl p-4 mb-3 space-y-3"
+        >
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="text-xs font-medium text-gray-700 dark:text-gray-300 mb-1 block">Role</label>
+              <select 
+                v-model="roleFilter"
+                class="w-full px-2 py-1.5 bg-white/50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-lg text-xs"
+              >
+                <option value="">Semua</option>
+                <option value="admin">Admin</option>
+                <option value="editor">Editor</option>
+                <option value="user">User</option>
+              </select>
+            </div>
+            <div>
+              <label class="text-xs font-medium text-gray-700 dark:text-gray-300 mb-1 block">Urutkan</label>
+              <select 
+                v-model="sortBy"
+                class="w-full px-2 py-1.5 bg-white/50 dark:bg-gray-800/50 border border-gray-200 dark:border-gray-700 rounded-lg text-xs"
+              >
+                <option value="newest">Terbaru</option>
+                <option value="oldest">Terlama</option>
+                <option value="name">Nama A-Z</option>
+              </select>
+            </div>
+          </div>
+          
+          <!-- Mobile Search Results Info -->
+          <div v-if="searchQuery || roleFilter" class="pt-2 border-t border-gray-200 dark:border-gray-700">
+            <div class="text-xs text-gray-600 dark:text-gray-400">
+              <div class="mb-1">
+                Menampilkan {{ filteredUsers.length }} dari {{ users.length }} user
+              </div>
+              <button 
+                v-if="searchQuery || roleFilter"
+                @click="clearFilters"
+                class="w-full inline-flex items-center justify-center space-x-1 text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 transition-colors"
+              >
+                <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+                <span>Reset Filter</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </Transition>
+
+      <!-- No Search Results - Responsif -->
+      <div v-if="!loading && users.length > 0 && filteredUsers.length === 0" class="glass-card rounded-xl sm:rounded-2xl p-6 sm:p-8 text-center">
         <div class="max-w-sm mx-auto">
-          <div class="w-16 h-16 mx-auto bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-700 rounded-full flex items-center justify-center mb-4">
-            <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div class="w-12 h-12 sm:w-16 sm:h-16 mx-auto bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-700 rounded-full flex items-center justify-center mb-3 sm:mb-4">
+            <svg class="w-6 h-6 sm:w-8 sm:h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
           </div>
-          <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">User Tidak Ditemukan</h3>
-          <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">
+          <h3 class="text-base sm:text-lg font-semibold text-gray-900 dark:text-white mb-2">User Tidak Ditemukan</h3>
+          <p class="text-gray-600 dark:text-gray-300 text-xs sm:text-sm mb-4">
             Tidak ada user yang cocok dengan pencarian Anda
           </p>
           <button 
             @click="clearFilters"
-            class="inline-flex items-center space-x-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-2 rounded-lg hover:shadow-lg transition-all duration-300 transform font-semibold text-sm"
+            class="inline-flex items-center justify-center space-x-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-4 py-2 rounded-lg hover:shadow-lg transition-all duration-300 transform font-semibold text-xs sm:text-sm w-full sm:w-auto"
           >
-            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg class="w-3 h-3 sm:w-4 sm:h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
             </svg>
             <span>Tampilkan Semua User</span>
@@ -165,117 +273,161 @@
         </div>
       </div>
 
-      <!-- Empty State -->
-      <div v-else-if="users.length === 0" class="glass-card rounded-2xl p-8 text-center">
+      <!-- Empty State - Responsif -->
+      <div v-else-if="users.length === 0" class="glass-card rounded-xl sm:rounded-2xl p-6 sm:p-8 text-center">
         <div class="max-w-sm mx-auto">
-          <div class="relative mb-6">
-            <div class="w-24 h-24 mx-auto bg-gradient-to-br from-purple-100 to-pink-100 dark:from-purple-900/20 dark:to-pink-900/20 rounded-full flex items-center justify-center">
-              <svg class="w-12 h-12 text-purple-500 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <div class="relative mb-4 sm:mb-6">
+            <div class="w-16 h-16 sm:w-24 sm:h-24 mx-auto bg-gradient-to-br from-purple-100 to-pink-100 dark:from-purple-900/20 dark:to-pink-900/20 rounded-full flex items-center justify-center">
+              <svg class="w-8 h-8 sm:w-12 sm:h-12 text-purple-500 dark:text-purple-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z"></path>
               </svg>
             </div>
           </div>
-          <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-3">Belum Ada User</h3>
-          <p class="text-gray-600 dark:text-gray-300 text-sm mb-6">Mulai dengan menambahkan user pertama ke sistem</p>
-          <NuxtLink 
-            to="/admin/users/tambah" 
-            class="inline-flex items-center space-x-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white px-6 py-3 rounded-xl hover:shadow-lg transition-all duration-300 hover:scale-105 transform font-semibold text-sm"
-          >
-            <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
-            </svg>
-            <span>Tambah User Pertama</span>
-          </NuxtLink>
+          <h3 class="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-2 sm:mb-3">Belum Ada User</h3>
+          <p class="text-gray-600 dark:text-gray-300 text-xs sm:text-sm mb-4 sm:mb-6">Mulai dengan menambahkan user pertama ke sistem</p>
+          
         </div>
       </div>
 
-      <!-- Users Grid -->
-      <div v-else class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4 gap-4">
+      <!-- Users Grid - Responsif dengan View Mode -->
+      <div :class="[
+        'gap-3 sm:gap-4',
+        viewMode === 'grid' 
+          ? 'grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-4'
+          : 'flex flex-col space-y-3'
+      ]">
         <div 
           v-for="user in filteredUsers" 
           :key="user.id"
-          class="glass-card rounded-xl p-4 hover:shadow-lg transition-all duration-300 group hover:scale-102 transform border border-gray-200/50 dark:border-gray-700/50"
+          :class="[
+            'glass-card rounded-xl p-3 sm:p-4 hover:shadow-lg transition-all duration-300 group hover:scale-102 transform border border-gray-200/50 dark:border-gray-700/50',
+            viewMode === 'list' ? 'flex flex-col sm:flex-row sm:items-center sm:justify-between' : ''
+          ]"
         >
           <!-- User Header -->
-          <div class="flex items-start justify-between mb-3">
-            <div class="flex items-center space-x-3">
-              <div 
-                class="w-12 h-12 rounded-xl flex items-center justify-center text-white font-bold text-lg shadow-lg"
-                :class="getUserAvatarColor(user.id)"
-              >
-                {{ user.name?.charAt(0)?.toUpperCase() || 'U' }}
+          <div :class="viewMode === 'list' ? 'flex-1 min-w-0 pr-4' : ''">
+            <div class="flex items-start justify-between mb-3">
+              <div class="flex items-center space-x-3">
+                <div 
+                  class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg sm:rounded-xl flex items-center justify-center text-white font-bold text-base sm:text-lg shadow-lg"
+                  :class="getUserAvatarColor(user.id)"
+                >
+                  {{ user.name?.charAt(0)?.toUpperCase() || 'U' }}
+                </div>
+                <div class="flex-1 min-w-0">
+                  <h3 class="font-semibold text-gray-900 dark:text-white text-sm truncate group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors duration-300">
+                    {{ user.name }}
+                  </h3>
+                  <p class="text-xs text-gray-500 dark:text-gray-400 mt-1 truncate">{{ user.email }}</p>
+                </div>
               </div>
-              <div>
-                <h3 class="font-semibold text-gray-900 dark:text-white text-sm group-hover:text-purple-600 dark:group-hover:text-purple-400 transition-colors duration-300">
-                  {{ user.name }}
-                </h3>
-                <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">ID: {{ user.id }}</p>
+              <!-- Action Buttons untuk Desktop Grid View -->
+              <div v-if="viewMode === 'grid'" class="flex space-x-1 sm:hidden lg:flex">
+                <NuxtLink
+                  :to="`/admin/users/edit/${user.id}`"
+                  class="p-1.5 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-all duration-300 hover:scale-110 transform group/edit"
+                  title="Edit User"
+                >
+                  <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5 group-hover/edit:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
+                  </svg>
+                </NuxtLink>
+                <button
+                  class="p-1.5 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/30 transition-all duration-300 hover:scale-110 transform group/delete"
+                  @click="hapus(user.id)"
+                  title="Hapus User"
+                >
+                  <svg class="w-3 h-3 sm:w-3.5 sm:h-3.5 group-hover/delete:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                  </svg>
+                </button>
               </div>
             </div>
-            <div class="flex space-x-1">
-              <NuxtLink
-                :to="`/admin/users/edit/${user.id}`"
-                class="p-1.5 bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-all duration-300 hover:scale-110 transform group/edit"
-                title="Edit User"
-              >
-                <svg class="w-3.5 h-3.5 group-hover/edit:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
-                </svg>
-              </NuxtLink>
-              <button
-                class="p-1.5 bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/30 transition-all duration-300 hover:scale-110 transform group/delete"
-                @click="hapus(user.id)"
-                title="Hapus User"
-              >
-                <svg class="w-3.5 h-3.5 group-hover/delete:scale-110 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                </svg>
-              </button>
+
+            <!-- User Details -->
+            <div class="space-y-2 mb-3">
+              <div class="flex items-center space-x-2 text-xs">
+                <span 
+                  class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium border"
+                  :class="getRoleBadgeClass(user.role)"
+                >
+                  <span class="w-1.5 h-1.5 rounded-full mr-1" :class="getRoleDotClass(user.role)"></span>
+                  {{ user.role || 'user' }}
+                </span>
+                <span class="text-gray-500 dark:text-gray-400 text-xs">
+                  {{ formatDate(user.created_at) }}
+                </span>
+              </div>
             </div>
           </div>
 
-          <!-- User Details -->
-          <div class="space-y-2 mb-3">
-            <div class="flex items-center space-x-2 text-xs text-gray-600 dark:text-gray-400">
-              <svg class="w-3.5 h-3.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
-              </svg>
-              <span class="truncate">{{ user.email }}</span>
-            </div>
-            <div class="flex items-center space-x-2 text-xs">
-              <span 
-                class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium border"
-                :class="getRoleBadgeClass(user.role)"
-              >
-                <span class="w-1.5 h-1.5 rounded-full mr-1" :class="getRoleDotClass(user.role)"></span>
-                {{ user.role || 'user' }}
-              </span>
-              <span class="text-gray-500 dark:text-gray-400 text-xs">
-                {{ formatDate(user.created_at) }}
-              </span>
-            </div>
-          </div>
-
-          <!-- Action Buttons -->
-          <div class="flex space-x-2 pt-3 border-t border-gray-200 dark:border-gray-700">
+          <!-- Action Buttons untuk Mobile Grid dan List View -->
+          <div :class="[
+            'flex space-x-2 pt-3 border-t border-gray-200 dark:border-gray-700',
+            viewMode === 'list' ? 'sm:border-0 sm:pt-0' : ''
+          ]">
             <NuxtLink
               :to="`/admin/users/edit/${user.id}`"
-              class="flex-1 inline-flex items-center justify-center space-x-1 px-3 py-1.5 text-xs bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-all duration-300 font-medium"
+              :class="[
+                'flex-1 inline-flex items-center justify-center space-x-1 px-2 py-1.5 text-xs bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-all duration-300 font-medium',
+                viewMode === 'list' ? 'sm:w-auto sm:px-3' : ''
+              ]"
             >
               <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path>
               </svg>
-              <span>Edit</span>
+              <span class="hidden sm:inline">Edit</span>
+              <span class="sm:hidden">Edit</span>
             </NuxtLink>
             <button
               @click="hapus(user.id)"
-              class="flex-1 inline-flex items-center justify-center space-x-1 px-3 py-1.5 text-xs bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/30 transition-all duration-300 font-medium"
+              :class="[
+                'flex-1 inline-flex items-center justify-center space-x-1 px-2 py-1.5 text-xs bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 rounded-lg hover:bg-red-100 dark:hover:bg-red-900/30 transition-all duration-300 font-medium',
+                viewMode === 'list' ? 'sm:w-auto sm:px-3' : ''
+              ]"
             >
               <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
               </svg>
-              <span>Hapus</span>
+              <span class="hidden sm:inline">Hapus</span>
+              <span class="sm:hidden">Hapus</span>
             </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Actions Footer - Responsif -->
+      <div v-if="users.length > 0" class="glass-card rounded-xl p-3 sm:p-4 mt-4 sm:mt-6">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between space-y-3 sm:space-y-0">
+          <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
+            Total <span class="font-semibold text-purple-600 dark:text-purple-400">{{ users.length }}</span> user • 
+            <span class="font-semibold text-blue-600 dark:text-blue-400">{{ adminCount }}</span> admin • 
+            <span class="font-semibold text-green-600 dark:text-green-400">{{ editorCount }}</span> editor
+          </div>
+          <div class="flex flex-wrap gap-2">
+            <!-- View Toggle Desktop -->
+            <button 
+              v-if="!isMobile"
+              @click="toggleViewMode"
+              class="hidden lg:flex items-center gap-1 px-2 py-1.5 text-xs bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 rounded-md hover:bg-gray-200 dark:hover:bg-gray-700 transition-all duration-300 border border-gray-200 dark:border-gray-700"
+            >
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path v-if="viewMode === 'grid'" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16" />
+                <path v-else stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
+              </svg>
+              <span>{{ viewMode === 'grid' ? 'List View' : 'Grid View' }}</span>
+            </button>
+            
+            <button 
+              @click="exportUsers"
+              class="inline-flex items-center gap-1 px-2 py-1.5 text-xs bg-blue-50 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 rounded-md hover:bg-blue-100 dark:hover:bg-blue-900/30 transition-all duration-300 border border-blue-200 dark:border-blue-800"
+            >
+              <svg class="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M9 19l3 3m0 0l3-3m-3 3V10"></path>
+              </svg>
+              <span>Export</span>
+            </button>
+            
           </div>
         </div>
       </div>
@@ -285,13 +437,28 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
+import { ref, onMounted, computed, onUnmounted } from 'vue'
 
 const users = ref<any[]>([])
 const loading = ref(true)
 const searchQuery = ref('')
 const roleFilter = ref('')
 const sortBy = ref('newest')
+const viewMode = ref('grid') // 'grid' atau 'list'
+const isFilterOpen = ref(false)
+const isMobile = ref(false)
+
+// Deteksi ukuran layar
+const checkScreenSize = () => {
+  isMobile.value = window.innerWidth < 1024 // lg breakpoint
+  if (isMobile.value) {
+    viewMode.value = 'grid' // Default grid di mobile
+  }
+}
+
+const toggleViewMode = () => {
+  viewMode.value = viewMode.value === 'grid' ? 'list' : 'grid'
+}
 
 definePageMeta({ layout: 'admin' })
 
@@ -390,6 +557,7 @@ const clearFilters = () => {
   searchQuery.value = ''
   roleFilter.value = ''
   sortBy.value = 'newest'
+  isFilterOpen.value = false
 }
 
 const exportUsers = () => {
@@ -435,7 +603,15 @@ async function hapus(id: number | string) {
   }
 }
 
-onMounted(loadUsers)
+onMounted(() => {
+  checkScreenSize()
+  window.addEventListener('resize', checkScreenSize)
+  loadUsers()
+})
+
+onUnmounted(() => {
+  window.removeEventListener('resize', checkScreenSize)
+})
 </script>
 
 <style scoped>
@@ -461,5 +637,15 @@ onMounted(loadUsers)
 
 .hover-scale-102:hover {
   transform: scale(1.02);
+}
+
+/* Responsive touch targets */
+@media (max-width: 640px) {
+  button, 
+  a[role="button"],
+  .cursor-pointer {
+    min-height: 44px;
+    min-width: 44px;
+  }
 }
 </style>
