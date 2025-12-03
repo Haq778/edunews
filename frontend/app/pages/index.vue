@@ -216,8 +216,8 @@
             </div>
             <p class="text-gray-600 dark:text-gray-400 text-sm">
               <span class="font-semibold text-blue-600 dark:text-blue-400">{{ filteredBerita.length }}</span> artikel ditemukan
-              <span v-if="selectedCategory" class="text-green-600 dark:text-green-400 font-bold ml-2">
-                • {{ selectedCategory }}
+              <span v-if="categoryFilter" class="text-green-600 dark:text-green-400 font-bold ml-2">
+                • {{ categoryFilter }}
               </span>
             </p>
           </div>
@@ -295,22 +295,22 @@
                 />
               </div>
               
-              <!-- Category -->
+              <!-- Category Filter - DIPERBAIKI -->
               <div>
                 <label class="text-xs font-bold text-gray-700 dark:text-gray-300 mb-2 block">Kategori</label>
                 <select
-                  v-model="selectedCategory"
+                  v-model="categoryFilter"
                   class="w-full p-3 rounded-lg border border-gray-300 dark:border-gray-600 
                          bg-white dark:bg-gray-600 text-gray-900 dark:text-white focus:outline-none 
                          focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500 transition-all duration-300 text-sm"
                 >
                   <option value="">Semua Kategori</option>
                   <option 
-                    v-for="cat in categories" 
-                    :key="cat" 
-                    :value="cat"
+                    v-for="category in availableCategories" 
+                    :key="category" 
+                    :value="category"
                   >
-                    {{ cat }}
+                    {{ category }}
                   </option>
                 </select>
               </div>
@@ -330,6 +330,25 @@
                   <option value="views">Paling Populer</option>
                 </select>
               </div>
+            </div>
+            
+            <!-- Search Results Info -->
+            <div v-if="searchQuery || categoryFilter" class="mt-3 flex items-center justify-between text-xs">
+              <div class="text-gray-600 dark:text-gray-400">
+                Menampilkan {{ filteredBerita.length }} dari {{ beritaList.length }} berita
+                <span v-if="searchQuery"> untuk "<span class="font-semibold">{{ searchQuery }}</span>"</span>
+                <span v-if="categoryFilter"> dalam kategori "<span class="font-semibold">{{ categoryFilter }}</span>"</span>
+              </div>
+              <button 
+                v-if="searchQuery || categoryFilter"
+                @click="clearFilters"
+                class="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300 transition-colors flex items-center space-x-1"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                </svg>
+                <span>Reset Filter</span>
+              </button>
             </div>
           </div>
         </Transition>
@@ -360,6 +379,31 @@
           >
             🔄 Coba Lagi
           </button>
+        </div>
+
+        <!-- No Search Results -->
+        <div v-if="!loading && beritaList.length > 0 && filteredBerita.length === 0" class="glass-card rounded-xl p-8 text-center mb-6">
+          <div class="max-w-sm mx-auto">
+            <div class="w-16 h-16 mx-auto bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-800 dark:to-gray-700 rounded-full flex items-center justify-center mb-4">
+              <svg class="w-8 h-8 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">Tidak Ditemukan</h3>
+            <p class="text-gray-600 dark:text-gray-300 text-sm mb-4">
+              Tidak ada berita yang cocok dengan pencarian "<span class="font-semibold">{{ searchQuery }}</span>"
+              <span v-if="categoryFilter"> dalam kategori "<span class="font-semibold">{{ categoryFilter }}</span>"</span>
+            </p>
+            <button 
+              @click="clearFilters"
+              class="inline-flex items-center space-x-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-2 rounded-lg hover:shadow-lg transition-all duration-300 transform font-semibold text-sm"
+            >
+              <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+              </svg>
+              <span>Tampilkan Semua Berita</span>
+            </button>
+          </div>
         </div>
 
         <!-- News Grid/List -->
@@ -438,21 +482,23 @@ interface Berita {
   id: number
   title: string
   content: string
-  category: string
-  date: string
+  category?: {
+    name: string
+  }
+  created_at: string
   views: number
   cover: string
 }
 
-// Reactive state
+// Reactive state - DIPERBAIKI
 const searchQuery = ref('')
-const selectedCategory = ref('')
+const categoryFilter = ref('') // Konsisten dengan code kedua
 const sortBy = ref('newest')
 const loading = ref(true)
 const error = ref<Error | null>(null)
 const viewMode = ref('grid')
 const isFilterPanelOpen = ref(false)
-const berita = ref<Berita[]>([])
+const beritaList = ref<Berita[]>([])
 const showCards = ref(false)
 const visibleCount = ref(6)
 
@@ -476,6 +522,16 @@ const featuredCategories = ref([
 const isModalOpen = ref(false)
 const selectedArticle = ref<Berita | null>(null)
 
+// Computed properties - DIPERBAIKI (sama dengan code kedua)
+const availableCategories = computed(() => {
+  const categories = beritaList.value
+    .map(item => item.category?.name)
+    .filter(Boolean)
+    .filter((value, index, self) => self.indexOf(value) === index)
+    .sort()
+  return categories
+})
+
 const openArticle = (article: Berita) => {
   selectedArticle.value = article
   isModalOpen.value = true
@@ -495,12 +551,12 @@ const fetchBerita = async () => {
     const res = await fetch('http://localhost:8080/api/berita')
     if (!res.ok) throw new Error(`HTTP ${res.status}`)
     const data: Berita[] = await res.json()
-    berita.value = data.map(b => ({
+    beritaList.value = data.map(b => ({
       id: b.id,
       title: b.title || 'Judul kosong',
       content: b.content || '',
-      category: b.category || 'Umum',
-      date: b.date || new Date().toISOString(),
+      category: b.category || { name: 'Umum' },
+      created_at: b.created_at || new Date().toISOString(),
       views: b.views || 0,
       cover: b.cover || ''
     }))
@@ -515,14 +571,14 @@ const fetchBerita = async () => {
 }
 
 const filterByCategory = (category: string) => {
-  selectedCategory.value = category
+  categoryFilter.value = category
   isFilterPanelOpen.value = false
   scrollToNews()
 }
 
 const clearFilters = () => {
   searchQuery.value = ''
-  selectedCategory.value = ''
+  categoryFilter.value = ''
   sortBy.value = 'newest'
   visibleCount.value = 6
 }
@@ -540,36 +596,51 @@ onMounted(() => {
   fetchBerita()
 })
 
-const categories = computed(() => [...new Set(berita.value.map(b => b.category))])
-
+// Filtering logic - DIPERBAIKI (sama dengan code kedua)
 const filteredBerita = computed(() => {
-  return berita.value.filter(b => {
-    const searchTerm = searchQuery.value.toLowerCase()
-    const matchSearch = b.title.toLowerCase().includes(searchTerm) || b.content.toLowerCase().includes(searchTerm)
-    const matchCategory = selectedCategory.value === '' || b.category === selectedCategory.value
-    return matchSearch && matchCategory
-  })
-})
+  let filtered = beritaList.value
 
-const sortedBerita = computed<Berita[]>(() => {
-  const articles = [...filteredBerita.value]
+  // Filter by search query
+  if (searchQuery.value) {
+    const query = searchQuery.value.toLowerCase()
+    filtered = filtered.filter(item => 
+      item.title?.toLowerCase().includes(query) ||
+      item.category?.name?.toLowerCase().includes(query)
+    )
+  }
+
+  // Filter by category
+  if (categoryFilter.value) {
+    filtered = filtered.filter(item => 
+      item.category?.name === categoryFilter.value
+    )
+  }
+
+  // Sort results
   switch (sortBy.value) {
     case 'newest':
-      return articles.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+      filtered = [...filtered].sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+      break
     case 'oldest':
-      return articles.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+      filtered = [...filtered].sort((a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime())
+      break
     case 'title':
-      return articles.sort((a, b) => a.title.localeCompare(b.title))
+      filtered = [...filtered].sort((a, b) => a.title?.localeCompare(b.title))
+      break
     case 'views':
-      return articles.sort((a, b) => b.views - a.views)
-    default:
-      return articles
+      filtered = [...filtered].sort((a, b) => (b.views || 0) - (a.views || 0))
+      break
   }
+
+  return filtered
 })
 
 const displayedBerita = computed(() => {
-  return sortedBerita.value.slice(0, visibleCount.value)
+  return filteredBerita.value.slice(0, visibleCount.value)
 })
+
+// Untuk kompatibilitas
+const categories = computed(() => availableCategories.value)
 </script>
 
 <style scoped>
@@ -898,4 +969,16 @@ html {
 .dark ::-webkit-scrollbar-thumb:hover {
   background: linear-gradient(to bottom, #3b82f6, #8b5cf6);
 }
-</style>
+
+/* Glass card effect */
+.glass-card {
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.dark .glass-card {
+  background: rgba(17, 24, 39, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+</style>  

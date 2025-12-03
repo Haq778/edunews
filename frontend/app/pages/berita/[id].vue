@@ -8,7 +8,7 @@
       <div class="absolute top-3/4 left-1/4 w-64 h-64 bg-gradient-to-r from-orange-500/10 to-yellow-500/10 rounded-full blur-3xl animate-float-fast"></div>
       
       <!-- Animated grid pattern -->
-      <div class="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_at_center,black_30%,transparent_70%)]"></div>
+      <div class="absolute inset-0 bg-[linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radular-gradient(ellipse_at_center,black_30%,transparent_70%)]"></div>
     </div>
 
     <!-- Navigation Bar -->
@@ -23,21 +23,21 @@
             <svg class="w-5 h-5 text-gray-700 dark:text-gray-300 transform group-hover:-translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
             </svg>
-            <span class="font-bold text-gray-700 dark:text-gray-300 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+            <span class="font-bold text-gray-700 dark:text-gray-300 group-hover:text-blue-600 dark:group-hover:text-cyan-400 transition-colors">
               Kembali ke Beranda
             </span>
           </button>
 
           <!-- Site Logo/Name -->
           <div class="text-center">
-            <div class="text-2xl font-black bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 bg-clip-text text-transparent">
-              NEWS<span class="text-red-600">.</span>ID
+            <div class="text-2xl font-black bg-gradient-to-r from-blue-600 via-cyan-500 to-teal-500 bg-clip-text text-transparent">
+              NEWS<span class="text-blue-600">.</span>ID
             </div>
             <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">Portal Berita Terkini</div>
           </div>
 
           <!-- Reading Time -->
-          <div class="flex items-center space-x-2 px-4 py-3 bg-gradient-to-r from-red-500 to-orange-500 rounded-2xl shadow-lg">
+          <div class="flex items-center space-x-2 px-4 py-3 bg-gradient-to-r from-cyan-600 to-blue-600 rounded-2xl shadow-lg">
             <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
             </svg>
@@ -48,7 +48,7 @@
     </div>
 
     <!-- Breaking News Banner -->
-    <div v-if="isBreakingNews" class="relative z-10 bg-gradient-to-r from-red-600 via-red-500 to-red-600 text-white py-3 px-4 animate-pulse">
+    <div v-if="isBreakingNews" class="relative z-10 bg-gradient-to-r from-orange-500 via-orange-400 to-yellow-500 text-white py-3 px-4 animate-pulse">
       <div class="max-w-6xl mx-auto flex items-center justify-between">
         <div class="flex items-center space-x-3">
           <div class="relative">
@@ -89,7 +89,7 @@
                   </div>
                   <!-- Image Badge -->
                   <div class="absolute top-4 left-4">
-                    <span class="px-4 py-2 text-sm font-bold bg-gradient-to-r from-red-600 to-red-500 text-white rounded-full shadow-lg animate-pulse">
+                    <span class="px-4 py-2 text-sm font-bold bg-gradient-to-r from-blue-600 to-cyan-500 text-white rounded-full shadow-lg">
                       {{ berita?.category?.name?.toUpperCase() || "UTAMA" }}
                     </span>
                   </div>
@@ -107,7 +107,7 @@
                   
                   <div class="flex flex-wrap items-center gap-4 mb-2">
                     <div class="flex items-center space-x-2 bg-gray-100 dark:bg-gray-800 px-3 py-1.5 rounded-full">
-                      <svg class="w-4 h-4 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <svg class="w-4 h-4 text-cyan-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                       </svg>
                       <span class="font-medium text-sm text-gray-700 dark:text-gray-300">{{ formattedDate }}</span>
@@ -129,7 +129,7 @@
                 </div>
 
                 <!-- Lead Paragraph -->
-                <div class="bg-gradient-to-r from-gray-50 to-white dark:from-gray-800 dark:to-gray-900 p-6 rounded-xl border-l-4 border-red-500">
+                <div class="bg-gradient-to-r from-gray-50 to-white dark:from-gray-800 dark:to-gray-900 p-6 rounded-xl border-l-4 border-blue-500">
                   <p class="text-lg md:text-xl text-gray-700 dark:text-gray-200 font-medium leading-relaxed">
                     {{ berita?.excerpt || "Ringkasan berita akan ditampilkan di sini." }}
                   </p>
@@ -137,7 +137,7 @@
 
                 <!-- Quick Actions -->
                 <div class="flex flex-wrap gap-3">
-                  <button @click="copyLink" class="flex items-center space-x-2 px-5 py-3 bg-gradient-to-r from-blue-600 to-blue-500 text-white rounded-xl hover:from-blue-700 hover:to-blue-600 transition-all duration-300 transform hover:-translate-y-0.5 shadow-lg hover:shadow-xl">
+                  <button @click="copyLink" class="flex items-center space-x-2 px-5 py-3 bg-gradient-to-r from-blue-600 to-cyan-500 text-white rounded-xl hover:from-blue-700 hover:to-cyan-600 transition-all duration-300 transform hover:-translate-y-0.5 shadow-lg hover:shadow-xl">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
                     </svg>
@@ -151,7 +151,7 @@
                     <span class="font-medium">Simpan</span>
                   </button>
                   
-                  <button class="flex items-center space-x-2 px-5 py-3 bg-gradient-to-r from-green-600 to-green-500 text-white rounded-xl hover:from-green-700 hover:to-green-600 transition-all duration-300 transform hover:-translate-y-0.5 shadow-lg hover:shadow-xl">
+                  <button class="flex items-center space-x-2 px-5 py-3 bg-gradient-to-r from-green-600 to-emerald-500 text-white rounded-xl hover:from-green-700 hover:to-emerald-600 transition-all duration-300 transform hover:-translate-y-0.5 shadow-lg hover:shadow-xl">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2.5" />
                     </svg>
@@ -179,7 +179,7 @@
           
           <!-- Copy Link -->
           <button @click="copyLink" class="p-3 hover:bg-purple-100/50 dark:hover:bg-gray-700/50 rounded-xl transition-all duration-300 transform hover:-translate-x-1 group">
-            <div class="flex items-center justify-center w-8 h-8 bg-gradient-to-br from-purple-600 to-purple-500 rounded-lg group-hover:scale-110 transition-transform">
+            <div class="flex items-center justify-center w-8 h-8 bg-gradient-to-br from-blue-600 to-cyan-500 rounded-lg group-hover:scale-110 transition-transform">
               <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />
               </svg>
@@ -188,7 +188,7 @@
           
           <!-- Back to Top -->
           <button @click="scrollToTop" class="p-3 hover:bg-red-100/50 dark:hover:bg-gray-700/50 rounded-xl transition-all duration-300 transform hover:-translate-x-1 group">
-            <div class="flex items-center justify-center w-8 h-8 bg-gradient-to-br from-red-600 to-red-500 rounded-lg group-hover:scale-110 transition-transform">
+            <div class="flex items-center justify-center w-8 h-8 bg-gradient-to-br from-blue-600 to-cyan-500 rounded-lg group-hover:scale-110 transition-transform">
               <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 10l7-7m0 0l7 7m-7-7v18" />
               </svg>
@@ -221,15 +221,16 @@
 
           <!-- Article Content -->
           <div class="px-8 py-10">
+            <!-- Custom prose styling untuk dark mode -->
             <article
-              class="prose prose-lg dark:prose-invert max-w-none leading-relaxed"
+              class="article-content max-w-none leading-relaxed text-gray-800 dark:text-gray-200"
               v-html="berita?.content"
             ></article>
 
             <!-- Tags -->
             <div class="mt-10 pt-8 border-t border-gray-200 dark:border-gray-700/50">
               <div class="flex flex-wrap gap-3">
-                <span class="px-4 py-2 bg-gradient-to-r from-gray-800 to-gray-700 dark:from-gray-700 dark:to-gray-600 text-white rounded-full text-sm font-medium shadow-lg">
+                <span class="px-4 py-2 bg-gradient-to-r from-blue-600 to-cyan-500 text-white rounded-full text-sm font-medium shadow-lg">
                   #{{ berita?.category?.name || "berita" }}
                 </span>
                 <span v-for="(tag, index) in relatedTags" :key="index" 
@@ -241,12 +242,12 @@
 
             <!-- Author Box -->
             <div class="mt-10 relative group/author">
-              <div class="absolute -inset-1 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-2xl blur opacity-50 group-hover/author:opacity-100 transition duration-500"></div>
+              <div class="absolute -inset-1 bg-gradient-to-r from-blue-500/10 to-cyan-500/10 rounded-2xl blur opacity-50 group-hover/author:opacity-100 transition duration-500"></div>
               <div class="relative bg-gradient-to-r from-gray-50 to-white dark:from-gray-900 dark:to-gray-800 rounded-2xl p-6">
                 <div class="flex items-center space-x-4">
                   <div class="relative">
-                    <div class="absolute -inset-1 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full blur opacity-60 animate-pulse"></div>
-                    <div class="relative w-14 h-14 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center text-white font-bold text-xl shadow-lg">
+                    <div class="absolute -inset-1 bg-gradient-to-r from-blue-500 to-cyan-600 rounded-full blur opacity-60 animate-pulse"></div>
+                    <div class="relative w-14 h-14 bg-gradient-to-br from-blue-500 to-cyan-600 rounded-full flex items-center justify-center text-white font-bold text-xl shadow-lg">
                       {{ berita?.author?.charAt(0) || "A" }}
                     </div>
                   </div>
@@ -266,14 +267,14 @@
       <div class="mt-16 mb-20">
         <div class="flex items-center justify-between mb-8">
           <div class="relative">
-            <div class="absolute -inset-1 bg-gradient-to-r from-red-500/20 to-orange-500/20 rounded-lg blur"></div>
+            <div class="absolute -inset-1 bg-gradient-to-r from-cyan-500/20 to-blue-500/20 rounded-lg blur"></div>
             <h2 class="relative text-2xl md:text-3xl font-black text-gray-900 dark:text-white bg-white dark:bg-gray-900 px-4 py-2 rounded-lg">
               📰 BERITA TERKAIT
             </h2>
           </div>
           <button 
             @click="goToHome"
-            class="group flex items-center space-x-2 px-5 py-3 bg-gradient-to-r from-red-600 to-orange-500 text-white rounded-xl hover:from-red-700 hover:to-orange-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
+            class="group flex items-center space-x-2 px-5 py-3 bg-gradient-to-r from-blue-600 to-cyan-500 text-white rounded-xl hover:from-blue-700 hover:to-cyan-600 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-0.5"
           >
             <span class="font-semibold">Lihat Semua Berita</span>
             <svg class="w-4 h-4 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -298,7 +299,7 @@
                 />
                 <div class="absolute inset-0 bg-gradient-to-t from-black/50 via-transparent to-transparent"></div>
                 <div class="absolute top-4 left-4">
-                  <span class="px-3 py-1 bg-gradient-to-r from-red-600 to-red-500 text-white text-xs font-bold rounded-full shadow-lg">
+                  <span class="px-3 py-1 bg-gradient-to-r from-blue-600 to-cyan-500 text-white text-xs font-bold rounded-full shadow-lg">
                     TERKAIT
                   </span>
                 </div>
@@ -309,14 +310,14 @@
                 </div>
               </div>
               <div class="p-6">
-                <h3 class="font-bold text-gray-900 dark:text-white text-lg leading-tight mb-3 group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors line-clamp-2">
+                <h3 class="font-bold text-gray-900 dark:text-white text-lg leading-tight mb-3 group-hover:text-blue-600 dark:group-hover:text-cyan-400 transition-colors line-clamp-2">
                   {{ item.title }}
                 </h3>
                 <p class="text-gray-600 dark:text-gray-300 text-sm line-clamp-2 mb-4">
                   {{ item.excerpt || "" }}
                 </p>
                 <div class="flex items-center justify-between">
-                  <div class="text-red-600 dark:text-red-400 text-sm font-semibold flex items-center group-hover:translate-x-1 transition-transform">
+                  <div class="text-blue-600 dark:text-cyan-400 text-sm font-semibold flex items-center group-hover:translate-x-1 transition-transform">
                     Baca Selengkapnya
                     <svg class="w-4 h-4 ml-1 transform group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
@@ -346,14 +347,14 @@
         
         <div class="relative max-w-4xl mx-auto text-center">
           <h3 class="text-3xl font-bold mb-4 animate-bounce-subtle">🚀 Dapatkan Update Berita Terbaru</h3>
-          <p class="text-blue-200/90 mb-8 text-lg">Berlangganan newsletter kami untuk mendapatkan berita terkini langsung ke email Anda</p>
+          <p class="text-cyan-200/90 mb-8 text-lg">Berlangganan newsletter kami untuk mendapatkan berita terkini langsung ke email Anda</p>
           <div class="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
             <input 
               type="email" 
               placeholder="Masukkan email Anda" 
               class="flex-grow px-6 py-4 rounded-xl text-gray-900 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-lg transform transition-transform hover:scale-[1.02]"
             >
-            <button class="bg-gradient-to-r from-red-600 to-orange-500 hover:from-red-700 hover:to-orange-600 px-8 py-4 rounded-xl font-bold transition-all duration-300 transform hover:-translate-y-0.5 shadow-lg hover:shadow-xl animate-pulse-subtle">
+            <button class="bg-gradient-to-r from-blue-600 to-cyan-500 hover:from-blue-700 hover:to-cyan-600 px-8 py-4 rounded-xl font-bold transition-all duration-300 transform hover:-translate-y-0.5 shadow-lg hover:shadow-xl animate-pulse-subtle">
               BERLANGGANAN
             </button>
           </div>
@@ -465,7 +466,6 @@ function copyLink() {
   setTimeout(() => showShareToast.value = false, 2000);
 }
 
-// Hapus Facebook dan WhatsApp, hanya keep Twitter
 function shareTwitter() {
   window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(window.location.href)}&text=${encodeURIComponent(berita.value?.title)}`, '_blank');
 }
@@ -480,45 +480,124 @@ function scrollToTop() {
 </script>
 
 <style>
-/* Prose styles dengan perbaikan warna untuk dark mode */
-.prose {
-  font-family: 'Georgia', serif;
+/* Custom styling untuk artikel content dengan dark mode support */
+.article-content {
+  font-family: 'Georgia', 'Times New Roman', serif;
+  font-size: 1.125rem; /* text-lg */
+  line-height: 1.75;
+  color: #1f2937; /* gray-800 */
 }
 
-.prose h2 {
-  @apply text-2xl font-bold text-gray-900 dark:text-white mt-8 mb-4;
+.dark .article-content {
+  color: #e5e7eb; /* gray-200 */
 }
 
-.prose h3 {
-  @apply text-xl font-bold text-gray-800 dark:text-gray-200 mt-6 mb-3;
+.article-content h2 {
+  font-size: 1.875rem; /* text-3xl */
+  font-weight: bold;
+  margin-top: 2rem; /* mt-8 */
+  margin-bottom: 1rem; /* mb-4 */
+  color: #111827; /* gray-900 */
 }
 
-.prose p {
-  @apply mb-4 text-gray-700 dark:text-gray-300 leading-relaxed;
+.dark .article-content h2 {
+  color: #f9fafb; /* gray-50 */
 }
 
-.prose img {
-  @apply rounded-xl shadow-lg my-6;
+.article-content h3 {
+  font-size: 1.5rem; /* text-2xl */
+  font-weight: bold;
+  margin-top: 1.5rem; /* mt-6 */
+  margin-bottom: 0.75rem; /* mb-3 */
+  color: #1f2937; /* gray-800 */
 }
 
-.prose blockquote {
-  @apply border-l-4 border-red-600 pl-6 py-2 my-6 text-gray-600 dark:text-gray-300 italic;
+.dark .article-content h3 {
+  color: #f3f4f6; /* gray-100 */
 }
 
-.prose ul {
-  @apply list-disc pl-5 space-y-2 text-gray-700 dark:text-gray-300;
+.article-content p {
+  margin-bottom: 1rem; /* mb-4 */
+  color: #374151; /* gray-700 */
 }
 
-.prose ol {
-  @apply list-decimal pl-5 space-y-2 text-gray-700 dark:text-gray-300;
+.dark .article-content p {
+  color: #d1d5db; /* gray-300 */
 }
 
-.prose strong {
-  @apply text-gray-900 dark:text-white;
+.article-content img {
+  border-radius: 0.75rem; /* rounded-xl */
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  margin-top: 1.5rem; /* my-6 */
+  margin-bottom: 1.5rem; /* my-6 */
+  max-width: 100%;
+  height: auto;
 }
 
-.prose a {
-  @apply text-blue-600 dark:text-blue-400 hover:underline;
+.article-content blockquote {
+  border-left: 4px solid #2563eb; /* border-blue-600 */
+  padding-left: 1.5rem; /* pl-6 */
+  padding-top: 0.5rem; /* py-2 */
+  padding-bottom: 0.5rem; /* py-2 */
+  margin-top: 1.5rem; /* my-6 */
+  margin-bottom: 1.5rem; /* my-6 */
+  font-style: italic;
+  color: #4b5563; /* gray-600 */
+}
+
+.dark .article-content blockquote {
+  color: #d1d5db; /* gray-300 */
+  border-left-color: #06b6d4; /* border-cyan-500 */
+}
+
+.article-content ul {
+  list-style-type: disc;
+  padding-left: 1.25rem; /* pl-5 */
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  color: #374151; /* gray-700 */
+}
+
+.dark .article-content ul {
+  color: #d1d5db; /* gray-300 */
+}
+
+.article-content ol {
+  list-style-type: decimal;
+  padding-left: 1.25rem; /* pl-5 */
+  margin-top: 0.5rem;
+  margin-bottom: 0.5rem;
+  color: #374151; /* gray-700 */
+}
+
+.dark .article-content ol {
+  color: #d1d5db; /* gray-300 */
+}
+
+.article-content li {
+  margin-bottom: 0.25rem;
+}
+
+.article-content strong {
+  font-weight: bold;
+  color: #111827; /* gray-900 */
+}
+
+.dark .article-content strong {
+  color: #f9fafb; /* gray-50 */
+}
+
+.article-content a {
+  color: #2563eb; /* blue-600 */
+  text-decoration: none;
+}
+
+.dark .article-content a {
+  color: #06b6d4; /* cyan-500 */
+}
+
+.article-content a:hover {
+  text-decoration: underline;
 }
 
 /* Custom animations */
@@ -626,19 +705,24 @@ function scrollToTop() {
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-gray-100 dark:bg-gray-900;
+  background-color: #f3f4f6; /* gray-100 */
+}
+
+.dark ::-webkit-scrollbar-track {
+  background-color: #111827; /* gray-900 */
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-gradient-to-b from-blue-500 to-purple-600 rounded-full;
+  background: linear-gradient(to bottom, #06b6d4, #3b82f6); /* cyan-500 to blue-500 */
+  border-radius: 9999px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply from-blue-600 to-purple-700;
+  background: linear-gradient(to bottom, #0891b2, #2563eb); /* cyan-600 to blue-600 */
 }
 
 /* Smooth content animation */
-article {
+.article-content {
   animation: slide-up 0.6s ease-out;
 }
 
@@ -649,23 +733,28 @@ article {
 
 /* Text selection color */
 ::selection {
-  @apply bg-blue-500/30 text-gray-900 dark:text-white;
+  background-color: rgba(6, 182, 212, 0.3); /* cyan-500/30 */
+  color: #111827; /* gray-900 */
+}
+
+.dark ::selection {
+  color: #f9fafb; /* white */
 }
 
 /* Improve dark mode text visibility */
 .dark .text-gray-600 {
-  @apply text-gray-300;
+  color: #d1d5db; /* gray-300 */
 }
 
 .dark .text-gray-700 {
-  @apply text-gray-300;
+  color: #d1d5db; /* gray-300 */
 }
 
 .dark .text-gray-800 {
-  @apply text-gray-200;
+  color: #e5e7eb; /* gray-200 */
 }
 
 .dark .text-gray-900 {
-  @apply text-white;
+  color: #f9fafb; /* white */
 }
 </style>
